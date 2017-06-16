@@ -1,0 +1,22 @@
+{
+  "name": "jamshare-api",
+  "version": "1.0.0",
+  "description": "An open source music sharing platform where musicians can post and download original tracks.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristopherSClosser/JamShare-API.git"
+  },
+  "author": "Kayla, Kaylee, Isak, Chris",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChristopherSClosser/JamShare-API/issues"
+  },
+  "homepage": "https://github.com/ChristopherSClosser/JamShare-API#readme"
+}
