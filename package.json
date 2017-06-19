@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server.js",
     "debug": "DEBUG='jam*' npm run start",
-    "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
+    "test": "mocha",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "lint": "./node_modules/eslint/bin/eslint.js .",
     "test-debug": "DEBUG='jam*' ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha"

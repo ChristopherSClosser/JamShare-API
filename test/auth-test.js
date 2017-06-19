@@ -5,6 +5,7 @@ const request = require('superagent');
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const serverCtrl = require('./lib/server-ctrl.js');
+// const cleanDB = require('./lib/clean-db.js');
 
 mongoose.Promise = Promise
 
@@ -19,8 +20,8 @@ const exampleUser = {
 
 describe('testing auth-router', function(){
   before(done => serverCtrl.serverUp(server, done));
-  after(done => serverCtrl.serverDown(server, done);
-  afterEach(done => cleanDB(done));
+  after(done => serverCtrl.serverDown(server, done));
+  // afterEach(done => cleanDB(done));
 
   describe('testing POST /api/signup', function(){
     describe('with valid body', function(){
