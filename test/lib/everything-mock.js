@@ -5,7 +5,7 @@ const lorem = require('lorem-ipsum')
 const debug = require('debug')('jamshare-api:gallery-mock-everything')
 
 const Pic = require('../../model/pic.js')
-const User = require('../../model/user.js')
+const User = require('../../model/artist.js')
 const Gallery = require('../../model/gallery.js')
 
 module.exports = function(options, done){

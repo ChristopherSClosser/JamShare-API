@@ -1,30 +1,30 @@
-'use strict'
+'use strict';
 
-const debug = require('debug')('sulgram:user-mock')
-const User = require('../../model/user.js')
-const lorem = require('lorem-ipsum')
+const debug = require('debug')('jamshare-api:user-mock');
+const User = require('../../model/artist.js');
+const lorem = require('lorem-ipsum');
 
 module.exports = function(done){
-  debug('create mock user')
-  let username = lorem({count: 2, units: 'word'}).split(' ').join('-')
-  let password = lorem({count: 2, units: 'word'}).split(' ').join('-')
-  let email= lorem({count: 2, units: 'word'}).split(' ').join('-')
+  debug('create mock user');
+  let username = lorem({count: 2, units: 'word'}).split(' ').join('-');
+  let password = lorem({count: 2, units: 'word'}).split(' ').join('-');
+  let email= lorem({count: 2, units: 'word'}).split(' ').join('-');
   let exampleUser = {
     username,
     password,
     email: `${email}@jammer.com`,
   }
-  this.tempPassword = password
+  this.tempPassword = password;
   new User(exampleUser)
   .generatePasswordHash(exampleUser.password)
   .then( user => user.save())
   .then( user => {
-    this.tempUser = user
-    return user.generateToken()
+    this.tempUser = user;
+    return user.generateToken();
   })
   .then( token => {
-    this.tempToken = token
-    done()
+    this.tempToken = token;
+    done();
   })
-  .catch(done)
+  .catch(done);
 }

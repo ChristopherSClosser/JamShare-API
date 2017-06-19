@@ -5,7 +5,7 @@ const createError = require('http-errors')
 const jsonParser = require('body-parser').json()
 const debug = require('debug')('jamshare-api:auth-router')
 const basicAuth = require('../lib/basic-auth-middleware.js')
-const User = require('../model/user.js')
+const User = require('../model/artist.js')
 
 // module constants
 const authRouter = module.exports = Router()

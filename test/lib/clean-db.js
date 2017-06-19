@@ -3,7 +3,7 @@
 const debug = require('debug')('jamshare-api:clean-db')
 
 const Pic = require('../../model/pic.js')
-const User = require('../../model/user.js')
+const User = require('../../model/artist.js')
 const Gallery = require('../../model/gallery.js')
 
 module.exports = function(done){

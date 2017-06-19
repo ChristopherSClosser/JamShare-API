@@ -6,18 +6,18 @@ const jwt = require('jsonwebtoken');
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
-const debug = require('debug')('jamshare-api:user');
+const debug = require('debug')('jamshare-api:artist');
 
 const Schema = mongoose.Schema;
 
-const userSchema = Schema({
+const artistSchema = Schema({
   username: {type: String, required: true, unique: true, minlength: 5},
   email: {type: String, required: true, unique: true},
   password: {type: String, required: true},
   findHash: {type: String, unique: true},
 });
 
-userSchema.methods.generatePasswordHash = function(password){
+artistSchema.methods.generatePasswordHash = function(password){
   debug('generatePasswordHash');
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, 10, (err, hash) => {
@@ -28,7 +28,7 @@ userSchema.methods.generatePasswordHash = function(password){
   });
 };
 
-userSchema.methods.comparePasswordHash = function(password){
+artistSchema.methods.comparePasswordHash = function(password){
   debug('comparePasswordHash');
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, this.password, (err, valid) => {
@@ -39,7 +39,7 @@ userSchema.methods.comparePasswordHash = function(password){
   });
 };
 
-userSchema.methods.generateFindHash = function(){
+artistSchema.methods.generateFindHash = function(){
   debug('generateFindHash');
   return new Promise((resolve, reject) => {
     let tries = 0;
@@ -54,11 +54,11 @@ userSchema.methods.generateFindHash = function(){
         tries++;
         _generateFindHash.call(this);
       });
-    };
+    }
   });
 };
 
-userSchema.methods.generateToken = function(){
+artistSchema.methods.generateToken = function(){
   debug('generateToken');
   return new Promise((resolve, reject) => {
     this.generateFindHash()
@@ -67,4 +67,4 @@ userSchema.methods.generateToken = function(){
   });
 };
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('artist', artistSchema);

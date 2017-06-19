@@ -1,7 +1,7 @@
 'use strict'
 
 const debug = require('debug')('sulgram:mock-many-users')
-const User = require('../../model/user.js')
+const User = require('../../model/artist.js')
 const lorem = require('lorem-ipsum')
 
 module.exports = function(count, done){

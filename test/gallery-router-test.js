@@ -10,7 +10,7 @@ const mongoose = require('mongoose')
 const Promise = require('bluebird')
 
 // app
-const User = require('../model/user.js')
+const User = require('../model/artist.js')
 const server = require('../server.js')
 const cleanDB = require('./lib/clean-db.js')
 const mockUser = require('./lib/user-mock.js')
@@ -698,7 +698,7 @@ describe('test /api/gallery', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            let index = this.tempGallerys.length - i - 4 
+            let index = this.tempGallerys.length - i - 4
             expect(res.body[i].name).to.equal(this.tempGallerys[index].name)
           }
           done()
