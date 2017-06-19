@@ -7,23 +7,23 @@ describe('testing module fuzzy-query', function(){
   describe('with valid input', function(){
     let fields = ['name', 'duck']
     let query = {
-      name: 'slug',
+      name: 'jammer',
       duck: 'quack',
     }
 
     it('should return a mongo query', done => {
       let result = fuzzyQuery(fields, query)
       console.log('result', result)
-      expect(result.name['$regex'].toString()).to.equal('/.*s.*l.*u.*g.*/')
+      expect(result.name['$regex'].toString()).to.equal('/.*j.*a.*m.*m.*e.*r.*/')
       expect(result.duck.$regex.toString()).to.equal('/.*q.*u.*a.*c.*k.*/')
       done()
     })
   })
 
   describe('with bad array', function(){
-    let fields = '' 
+    let fields = ''
     let query = {
-      name: 'slug',
+      name: 'jammer',
       duck: 'quack',
     }
 

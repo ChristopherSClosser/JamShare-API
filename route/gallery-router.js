@@ -5,7 +5,7 @@ const AWS = require('aws-sdk')
 const Router = require('express').Router
 const jsonParser = require('body-parser').json()
 const createError = require('http-errors')
-const debug = require('debug')('slugram:gallery-route')
+const debug = require('debug')('jamshare-api:gallery-route')
 
 // app
 const Pic = require('../model/pic.js')
@@ -54,7 +54,7 @@ galleryRouter.put('/api/gallery/:id', bearerAuth, jsonParser, function(req, res,
   Gallery.findById(req.params.id)
   .catch(err => Promise.reject(createError(404, err.message)))
   .then(gallery => {
-    if (gallery.userID.toString() !== req.user._id.toString()) 
+    if (gallery.userID.toString() !== req.user._id.toString())
       return Promise.reject(createError(401, 'not users gallery'))
     let options = { runValidators: true, new: true}
     return Gallery.findByIdAndUpdate(req.params.id, req.body, options)
@@ -71,7 +71,7 @@ galleryRouter.delete('/api/gallery/:id', bearerAuth, function(req, res, next){
   .catch(err => Promise.reject(createError(404, err.message)))
   .then(gallery => {
     tempGallrey = gallery
-    if (gallery.userID.toString() !== req.user._id.toString()) 
+    if (gallery.userID.toString() !== req.user._id.toString())
       return Promise.reject(createError(401, 'not users gallery'))
     let deletePhotos = []
 
@@ -86,7 +86,7 @@ galleryRouter.delete('/api/gallery/:id', bearerAuth, function(req, res, next){
 
     return Promise.all(deletePhotos)
   })
-  .then(() => tempGallrey.remove()) 
+  .then(() => tempGallrey.remove())
   .then(() => res.sendStatus(204))
   .catch(next)
 })

@@ -1,7 +1,7 @@
 'use strict'
 
 // npm modules
-const debug = require('debug')('slugram:pic-mock')
+const debug = require('debug')('jamshare-api:pic-mock')
 
 // app modules
 const Pic = require('../../model/pic.js')

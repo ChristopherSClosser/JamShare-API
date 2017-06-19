@@ -2,7 +2,7 @@
 'use strict'
 
 const Pic = require('../../model/pic.js')
-const debug = require('debug')('slugram:gallery-mock')
+const debug = require('debug')('jamshare-api:gallery-mock')
 const galleryMock = require('./gallery-mock.js')
 const lorem = require('lorem-ipsum')
 

@@ -1,6 +1,6 @@
 'use strict'
 
-const debug = require('debug')('slugram:gallery-mock')
+const debug = require('debug')('jamshare-api:gallery-mock')
 const userMock = require('./user-mock.js')
 const Gallery = require('../../model/gallery.js')
 
@@ -12,7 +12,7 @@ module.exports = function(done){
     desc: 'not enough sun screan ouch',
   }
   userMock.call(this, err => {
-    if (err) 
+    if (err)
       return done(err)
     exampleGallery.userID = this.tempUser._id.toString()
     exampleGallery.username = this.tempUser.username

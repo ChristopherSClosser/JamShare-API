@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const Promise = require('bluebird')
 const mongoose = require('mongoose')
 const createError = require('http-errors')
-const debug = require('debug')('slugram:user')
+const debug = require('debug')('jamshare-api:user')
 
 // mondule constant
 const Schema = mongoose.Schema
@@ -31,7 +31,7 @@ userSchema.methods.generatePasswordHash = function(password){
   })
 }
 
-// for signin 
+// for signin
 // compare a plain text password with the stored hashed password
 userSchema.methods.comparePasswordHash = function(password){
   debug('comparePasswordHash')
@@ -44,7 +44,7 @@ userSchema.methods.comparePasswordHash = function(password){
   })
 }
 
-// for signup 
+// for signup
 userSchema.methods.generateFindHash = function(){
   debug('generateFindHash')
   return new Promise((resolve, reject) => {
