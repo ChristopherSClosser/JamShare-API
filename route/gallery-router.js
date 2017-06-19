@@ -21,8 +21,8 @@ const galleryRouter = module.exports = Router()
 
 galleryRouter.post('/api/gallery', bearerAuth, jsonParser, function(req, res, next){
   debug('POST /api/gallery')
-  req.body.userID = req.user._id
-  req.body.username = req.user.username
+  req.body.userID = req.artist._id
+  req.body.username = req.artist.username
   new Gallery(req.body).save()
   .then( gallery => res.json(gallery))
   .catch(next)
@@ -42,7 +42,7 @@ galleryRouter.get('/api/gallery/:id', bearerAuth, itemQueries,  function(req, re
   })
   .catch(err => Promise.reject(createError(400, err.message)))
   .then(gallery => {
-    if (gallery.userID.toString() !== req.user._id.toString())
+    if (gallery.userID.toString() !== req.artist._id.toString())
       return Promise.reject(createError(401, 'invalid userid'))
     res.json(gallery)
   })
@@ -54,7 +54,7 @@ galleryRouter.put('/api/gallery/:id', bearerAuth, jsonParser, function(req, res,
   Gallery.findById(req.params.id)
   .catch(err => Promise.reject(createError(404, err.message)))
   .then(gallery => {
-    if (gallery.userID.toString() !== req.user._id.toString())
+    if (gallery.userID.toString() !== req.artist._id.toString())
       return Promise.reject(createError(401, 'not users gallery'))
     let options = { runValidators: true, new: true}
     return Gallery.findByIdAndUpdate(req.params.id, req.body, options)
@@ -71,7 +71,7 @@ galleryRouter.delete('/api/gallery/:id', bearerAuth, function(req, res, next){
   .catch(err => Promise.reject(createError(404, err.message)))
   .then(gallery => {
     tempGallrey = gallery
-    if (gallery.userID.toString() !== req.user._id.toString())
+    if (gallery.userID.toString() !== req.artist._id.toString())
       return Promise.reject(createError(401, 'not users gallery'))
     let deletePhotos = []
 
@@ -96,7 +96,7 @@ galleryRouter.get('/api/gallery', bearerAuth, pageQueries, itemQueries, function
 
   let fields = ['name', 'desc']
   let query = fuzzyQuery(fields, req.query)
-  query.userID = req.user._id.toString()
+  query.userID = req.artist._id.toString()
   Gallery.find(query)
   .populate({
     path: 'pics',
