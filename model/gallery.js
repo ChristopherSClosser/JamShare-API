@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const gallerySchema = mongoose.Schema({
   name: {type: String, required: true},
@@ -9,6 +9,6 @@ const gallerySchema = mongoose.Schema({
   created: {type: Date, required: true, default: Date.now},
   userID: {type: mongoose.Schema.Types.ObjectId, required: true},
   pics: [{type: mongoose.Schema.Types.ObjectId, ref: 'pic'}],
-})
+});
 
-module.exports = mongoose.model('gallery', gallerySchema)
+module.exports = mongoose.model('gallery', gallerySchema);
