@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('slugram:server-ctrl');
+const debug = require('debug')('jamshare-api:server-ctrl');
 
 module.exports = exports = {};
 
