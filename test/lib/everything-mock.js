@@ -5,39 +5,39 @@ const lorem = require('lorem-ipsum')
 const debug = require('debug')('jamshare-api:gallery-mock-everything')
 
 const Pic = require('../../model/pic.js')
-const User = require('../../model/artist.js')
+const Artist = require('../../model/artist.js')
 const Gallery = require('../../model/gallery.js')
 
 module.exports = function(options, done){
-  debug('mocking users, gallerys, and pics')
+  debug('mocking artists, gallerys, and pics')
   if(!checkOptions)
     return done('bad options')
 
   // make usercount
   // make gallerycount for each user
   // make pictures for each gallery
-  this.tempUserData = []
+  this.tempArtistData = []
   this.tempGallerys = []
   this.tempPics = []
 
-  let makeUsers = []
+  let makeArtists = []
   for(var i=0; i<options.users; i++){
-    makeUsers.push(mockAUser())
+    makeArtists.push(mockAUser())
   }
 
-  Promise.all(makeUsers)
+  Promise.all(makeArtists)
   .map( userdata => {
-    this.tempUserData.push(userdata)
-    let makeUserGallerys = []
+    this.tempArtistData.push(userdata)
+    let makeArtistGallerys = []
     let userID = userdata.tempUser._id.toString()
     let username  = userdata.tempUser.username
     for(var i=0; i<options.gallerys; i++){
-      makeUserGallerys.push(mockAGallery(userID, username))
+      makeArtistGallerys.push(mockAGallery(userID, username))
     }
-    return Promise.all(makeUserGallerys)
+    return Promise.all(makeArtistGallerys)
   })
-  .map(userGallerys => {
-    return Promise.resolve(userGallerys)
+  .map(artistGallerys => {
+    return Promise.resolve(artistGallerys)
     .map(gallery => {
       let makeGalleryPics = []
       let userID = gallery.userID.toString()
@@ -73,14 +73,14 @@ function mockAUser(){
   let username = lorem({count: 4, units: 'word'}).split(' ').join('-')
   let password = lorem({count: 4, units: 'word'}).split(' ').join('-')
   let email= lorem({count: 4, units: 'word'}).split(' ').join('-')
-  let exampleUser = {
+  let exampleArtist = {
     username,
     password,
     email: `${email}@jammer.com`,
   }
   let tempPassword = password
   let tempUser, tempToken
-  return new User(exampleUser)
+  return new Artist(exampleArtist)
   .generatePasswordHash(tempPassword)
   .then( user => {
     tempUser = user

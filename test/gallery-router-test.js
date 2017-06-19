@@ -10,10 +10,10 @@ const mongoose = require('mongoose')
 const Promise = require('bluebird')
 
 // app
-const User = require('../model/artist.js')
+const Artist = require('../model/artist.js')
 const server = require('../server.js')
 const cleanDB = require('./lib/clean-db.js')
-const mockUser = require('./lib/user-mock.js')
+const mockArtist = require('./lib/artist-mock.js')
 const serverCtrl = require('./lib/server-ctrl.js')
 const fuzzyRegex = require('../lib/fuzzy-regex.js')
 const mockGallery = require('./lib/gallery-mock.js')
@@ -42,7 +42,7 @@ describe('test /api/gallery', function(){
   describe('testing POST to /api/gallery', () => {
     // create this.tempUser and this.tempToken
     describe('with valid token and body', () => {
-      before(done => mockUser.call(this, done))
+      before(done => mockArtist.call(this, done))
       it('should return a gallery', done => {
         request.post(`${url}/api/gallery`)
         .send(exampleGallery)
@@ -61,7 +61,7 @@ describe('test /api/gallery', function(){
     })
 
     describe('with invalid token', () => {
-      before(done => mockUser.call(this, done))
+      before(done => mockArtist.call(this, done))
       it('should respond with status 401', done => {
         request.post(`${url}/api/gallery`)
         .send(exampleGallery)
@@ -75,7 +75,7 @@ describe('test /api/gallery', function(){
     })
 
     describe('with invalid Bearer auth', () => {
-      before(done => mockUser.call(this, done))
+      before(done => mockArtist.call(this, done))
       it('should respond with status 400', done => {
         request.post(`${url}/api/gallery`)
         .send(exampleGallery)
@@ -89,7 +89,7 @@ describe('test /api/gallery', function(){
     })
 
     describe('with no Authorization header', () => {
-      before(done => mockUser.call(this, done))
+      before(done => mockArtist.call(this, done))
       it('should respond with status 400', done => {
         request.post(`${url}/api/gallery`)
         .send(exampleGallery)
@@ -102,7 +102,7 @@ describe('test /api/gallery', function(){
     })
 
     describe('with no name', () => {
-      before(done => mockUser.call(this, done))
+      before(done => mockArtist.call(this, done))
       it('should respond with status 400', done => {
         request.post(`${url}/api/gallery`)
         .set({Authorization: `Bearer ${this.tempToken}`})
@@ -116,7 +116,7 @@ describe('test /api/gallery', function(){
     })
 
     describe('with no desc', () => {
-      before(done => mockUser.call(this, done))
+      before(done => mockArtist.call(this, done))
       it('should respond with status 400', done => {
         request.post(`${url}/api/gallery`)
         .set({Authorization: `Bearer ${this.tempToken}`})
@@ -380,7 +380,7 @@ describe('test /api/gallery', function(){
     describe('with user whos been removed', function(){
       before(done => mockGallery.call(this, done))
       before(done => {
-        User.remove({})
+        Artist.remove({})
         .then(() => done())
         .catch(done)
       })
@@ -402,7 +402,7 @@ describe('test /api/gallery', function(){
       // mock user, password, token, and gallery
       before(done => mockGallery.call(this, done))
       // overwrite user, password, and token with new user
-      before(done => mockUser.call(this, done))
+      before(done => mockArtist.call(this, done))
 
       it('should respond with status 401', done => {
         request.get(`${url}/api/gallery/${this.tempGallery._id}`)
@@ -445,7 +445,7 @@ describe('test /api/gallery', function(){
     describe('update name ande desc', function(){
       // mock user, password, token, and gallery
       before(done => mockGallery.call(this, done))
-      before(done => mockUser.call(this, done))
+      before(done => mockArtist.call(this, done))
 
       it('should return a gallery', done => {
         request.put(`${url}/api/gallery/${this.tempGallery._id}`)
@@ -598,7 +598,7 @@ describe('test /api/gallery', function(){
     describe('with invalid galleryID', function(){
       // mock user, password, token, and gallery
       before(done => mockGallery.call(this, done))
-      before(done => mockUser.call(this, done))
+      before(done => mockArtist.call(this, done))
       it('should return a gallery', done => {
         request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
         .set({ Authorization: `Bearer ${this.tempToken}` })

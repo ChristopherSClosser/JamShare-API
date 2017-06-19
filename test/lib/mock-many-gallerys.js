@@ -1,7 +1,7 @@
 'use strict'
 
 const debug = require('debug')('jamshare-api:gallery-mock')
-const userMock = require('./user-mock.js')
+const userMock = require('./artist-mock.js')
 const Gallery = require('../../model/gallery.js')
 const lorem = require('lorem-ipsum')
 

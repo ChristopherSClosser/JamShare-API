@@ -12,7 +12,7 @@ const request = require('superagent')
 
 const picMock = require('./lib/pic-mock.js')
 const cleanDB = require('./lib/clean-db.js')
-const userMock = require('./lib/user-mock.js')
+const userMock = require('./lib/artist-mock.js')
 let fuzzyRegex = require('../lib/fuzzy-regex.js')
 const serverCtrl = require('./lib/server-ctrl.js')
 const galleryMock = require('./lib/gallery-mock.js')
@@ -389,7 +389,7 @@ describe('testing pic-router', function(){
       })
     })
 
-    
+
     describe('with ?name=do', function(){
       before(done => mockManyPics.call(this, 100, done))
       it ('should return an array of pics', done => {

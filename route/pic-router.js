@@ -19,12 +19,12 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js')
 const pageQuery = require('../lib/page-query-middleware.js')
 
 // Use bluebird implementation of Promise
-// will add a .promise() to AWS.Request 
+// will add a .promise() to AWS.Request
 AWS.config.setPromisesDependency(require('bluebird'))
 
 // module constants
 const s3 = new AWS.S3()
-const dataDir =`${__dirname}/../data` 
+const dataDir =`${__dirname}/../data`
 const upload = multer({dest: dataDir })
 const s3UploadPromise = require('../lib/s3-upload-promise.js')
 const picRouter = module.exports = require('express').Router()
@@ -56,17 +56,17 @@ picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, upload.single('file'),
   .then(gallery  => {
     tempGallery = gallery
     return s3UploadPromise(params)// IF FAILS 500 ERROR
-  })  
+  })
   .catch(err => err.status ? Promise.reject(err) : Promise.reject(createError(500, err.message)))
   .then(s3data => {
     del([`${dataDir}/*`])
     let picData = {
       name: req.body.name,
-      username: req.user.username,
+      username: req.artist.username,
       desc: req.body.desc,
       objectKey: s3data.Key,
       imageURI: s3data.Location,
-      userID: req.user._id,
+      userID: req.artist._id,
     }
     return new Pic(picData).save()
   })
@@ -89,20 +89,20 @@ picRouter.delete('/api/gallery/:galleryID/pic/:picID', bearerAuth, function(req,
   //check that the pic exists if not 404
   //make sure there userID matches the pic.userID if not 401
   //check that gallery id is correct if not 404
-  //remove the picID from the gallery 
+  //remove the picID from the gallery
   //delete the picture from aws
   //delete the pic from mongo
   //respond to the client
   let tempPic
   Pic.findById(req.params.picID) // 404
   .then( pic => {
-    if(pic.userID.toString() !== req.user._id.toString())
-      return Promise.reject(createError(401, 'user not authtorized to delete this pic'))
+    if(pic.userID.toString() !== req.artist._id.toString())
+      return Promise.reject(createError(401, 'artist not authorized to delete this pic'))
     tempPic = pic
     return Gallery.findById(req.params.galleryID) // 404
   })
   .catch(err => err.status? Promise.reject(err) : Promise.reject(createError(404, err.message))) // if no pic or gal found
-  .then( gallery => { 
+  .then( gallery => {
     gallery.pics = gallery.pics.filter( id => {
       if (id === req.params.picID) return false
       return true
@@ -117,7 +117,7 @@ picRouter.delete('/api/gallery/:galleryID/pic/:picID', bearerAuth, function(req,
     return s3.deleteObject(params).promise() // 500 error
   })
   .then(() => {
-    return Pic.findByIdAndRemove(req.params.picID) //500 
+    return Pic.findByIdAndRemove(req.params.picID) //500
   })
   .then(() => res.sendStatus(204))
   .catch(next)
@@ -137,10 +137,9 @@ picRouter.get('/api/public/pic', pageQuery, function(req, res, next){
 picRouter.get('/api/pic', bearerAuth, pageQuery, function(req, res, next){
   let fuzzyFields = [ 'name', 'desc' ]
   let query = fuzzyQuery(fuzzyFields, req.query)
-  query.userID = req.user._id.toString() 
+  query.userID = req.artist._id.toString()
   Pic.find(query)
   .sort({_id: req.query.sort}).skip(req.query.offset).limit(req.query.pagesize)
   .then(pics => res.json(pics))
   .catch(next)
-}) 
-
+})

@@ -1,22 +1,22 @@
 'use strict';
 
-const debug = require('debug')('jamshare-api:user-mock');
-const User = require('../../model/artist.js');
+const debug = require('debug')('jamshare-api:artist-mock');
+const Artist = require('../../model/artist.js');
 const lorem = require('lorem-ipsum');
 
 module.exports = function(done){
-  debug('create mock user');
+  debug('create mock artist');
   let username = lorem({count: 2, units: 'word'}).split(' ').join('-');
   let password = lorem({count: 2, units: 'word'}).split(' ').join('-');
   let email= lorem({count: 2, units: 'word'}).split(' ').join('-');
-  let exampleUser = {
+  let exampleArtist = {
     username,
     password,
     email: `${email}@jammer.com`,
   }
   this.tempPassword = password;
-  new User(exampleUser)
-  .generatePasswordHash(exampleUser.password)
+  new Artist(exampleArtist)
+  .generatePasswordHash(exampleArtist.password)
   .then( user => user.save())
   .then( user => {
     this.tempUser = user;
