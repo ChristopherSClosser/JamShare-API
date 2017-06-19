@@ -1,13 +1,13 @@
 'use strict'
 
 const debug = require('debug')('jamshare-api:gallery-mock')
-const userMock = require('./artist-mock.js')
+const artistMock = require('./artist-mock.js')
 const Gallery = require('../../model/gallery.js')
 const lorem = require('lorem-ipsum')
 
 module.exports = function(count, done){
   debug(`mock ${count}gallerys`)
-  userMock.call(this, err => {
+  artistMock.call(this, err => {
     if (err) return done(err)
     let galleryMocks = []
     let userID = this.tempUser._id.toString()

@@ -28,7 +28,7 @@ const url = `http://localhost:${process.env.PORT}`
 mongoose.Promise = Promise
 let exampleGallery = {
   name: 'beach adventure',
-  desc: 'not enough sun screan ouch',
+  desc: 'not enough sun screen ouch',
 }
 
 describe('test /api/gallery', function(){

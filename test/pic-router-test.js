@@ -12,7 +12,7 @@ const request = require('superagent')
 
 const picMock = require('./lib/pic-mock.js')
 const cleanDB = require('./lib/clean-db.js')
-const userMock = require('./lib/artist-mock.js')
+const artistMock = require('./lib/artist-mock.js')
 let fuzzyRegex = require('../lib/fuzzy-regex.js')
 const serverCtrl = require('./lib/server-ctrl.js')
 const galleryMock = require('./lib/gallery-mock.js')
@@ -168,7 +168,7 @@ describe('testing pic-router', function(){
 
     describe('should resond with 401', function(){
       before(done => picMock.call(this, done))
-      before(done => userMock.call(this, done))
+      before(done => artistMock.call(this, done))
 
       it('should respond with status 401', done => {
         request.delete(`${url}/api/gallery/${this.tempGallery._id}/pic/${this.tempPic._id}`)
