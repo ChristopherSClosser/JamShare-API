@@ -1,38 +1,78 @@
-'use strict';
+'use strict'
 
-const Router = require('express').Router;
-const createError = require('http-errors');
-const jsonParser = require('body-parser').json();
-const debug = require('debug')('jamshare-api:auth-router');
-const basicAuth = require('../lib/basic-auth-middleware.js');
-const User = require('../model/user.js');
+const crypto = require('crypto')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const Promise = require('bluebird')
+const mongoose = require('mongoose')
+const createError = require('http-errors')
+const debug = require('debug')('slugram:user')
 
-const authRouter = module.exports = Router();
+// mondule constant
+const Schema = mongoose.Schema
 
-authRouter.post('/api/signup', jsonParser, function(req, res, next){
-  debug('POST /api/signup');
+const userSchema = Schema({
+  username: {type: String, required: true, unique: true, minlength: 5},
+  email: {type: String, required: true, unique: true},
+  password: {type: String, required: true},
+  findHash: {type: String, unique: true},
+})
 
-  let password = req.body.password;
-  delete req.body.password;
-  let user = new User(req.body);
+// for signup
+// store a password that has been encrypted as a hash
+userSchema.methods.generatePasswordHash = function(password){
+  debug('generatePasswordHash')
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(password, 10, (err, hash) => {
+      if (err) return reject(err) // 500 error
+      this.password = hash
+      resolve(this)
+    })
+  })
+}
 
-  if (!password) return next(createError(400, 'requires password'));
-  if (password.length < 8) return next(createError(400, 'password must be 8 characters'));
+// for signin 
+// compare a plain text password with the stored hashed password
+userSchema.methods.comparePasswordHash = function(password){
+  debug('comparePasswordHash')
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, this.password, (err, valid) => {
+      if (err) return reject(err) // 500 error bcrypt failed
+      if (!valid) return reject(createError(401, 'wrong password'))
+      resolve(this)
+    })
+  })
+}
 
-  user.generatePasswordHash(password)
-  .then( user => user.save())
-  .then( user => user.generateToken())
-  .then( token => res.send(token))
-  .catch(next);
-});
+// for signup 
+userSchema.methods.generateFindHash = function(){
+  debug('generateFindHash')
+  return new Promise((resolve, reject) => {
+    let tries = 0
+    _generateFindHash.call(this)
 
-authRouter.get('/api/login', basicAuth, function(req, res, next){
-  debug('GET /api/login');
+    function _generateFindHash(){
+      this.findHash = crypto.randomBytes(32).toString('hex')
+      this.save()
+      .then(() => resolve(this.findHash))
+      .catch(err => {
+        if (tries > 3) return reject(err) // 500 error
+        tries++
+        _generateFindHash.call(this)
+      })
+    }
+  })
+}
 
-  User.findOne({username: req.auth.username})
-  .then( user => user.comparePasswordHash(req.auth.password))
-  .catch(err => Promise.reject(createError(401, err.message)))
-  .then( user => user.generateToken())
-  .then( token => res.send(token))
-  .catch(next);
-});
+// for sinup and signin
+userSchema.methods.generateToken = function(){
+  debug('generateToken')
+  return new Promise((resolve, reject) => {
+    this.generateFindHash()
+    .then(findHash => resolve(jwt.sign({token: findHash}, process.env.APP_SECRET)))
+    .catch(err => reject(err)) // 500 error from find hash
+  })
+}
+
+module.exports = mongoose.model('user', userSchema)
+// static methods

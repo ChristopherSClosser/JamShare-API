@@ -1,18 +1,18 @@
-'use strict';
+'use strict'
 
-const debug = require('debug')('jamshare-api:clean-db');
+const debug = require('debug')('slugram:clean-db')
 
-// const Pic = require('../../model/pic.js');
-const User = require('../../model/user.js');
-// const Gallery = require('../../model/gallery.js');
+const Pic = require('../../model/pic.js')
+const User = require('../../model/user.js')
+const Gallery = require('../../model/gallery.js')
 
 module.exports = function(done){
-  debug('clean up database');
+  debug('clean up database')
   Promise.all([
-    // Pic.remove({}),
+    Pic.remove({}),
     User.remove({}),
-    // Gallery.remove({}),
+    Gallery.remove({}),
   ])
   .then( () => done())
-  .catch(done);
+  .catch(done)
 }

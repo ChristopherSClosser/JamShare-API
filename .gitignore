@@ -132,3 +132,4 @@ jspm_packages
 *.tgz
 
 notes.js
+backup/*
