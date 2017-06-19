@@ -15,6 +15,5 @@ const picSchema = mongoose.Schema({
 module.exports = mongoose.model('pic', picSchema)
 
 //Pic.schema.path('name').validate(function(val) {
-  //return /(slug|byte)/.test(val)
+  //return /(jamshare)/.test(val)
 //})
-

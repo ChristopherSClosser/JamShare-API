@@ -76,7 +76,7 @@ function mockAUser(){
   let exampleUser = {
     username,
     password,
-    email: `${email}@slug.slug`,
+    email: `${email}@jammer.com`,
   }
   let tempPassword = password
   let tempUser, tempToken

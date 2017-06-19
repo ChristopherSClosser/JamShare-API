@@ -12,10 +12,10 @@ module.exports = function(done){
   let exampleUser = {
     username,
     password,
-    email: `${email}@slug.slug`,
+    email: `${email}@jammer.com`,
   }
   this.tempPassword = password
-  new User(exampleUser) 
+  new User(exampleUser)
   .generatePasswordHash(exampleUser.password)
   .then( user => user.save())
   .then( user => {

@@ -28,11 +28,11 @@ function mockAUser(){
   let exampleUser = {
     username,
     password,
-    email: `${email}@slug.slug`,
+    email: `${email}@jammer.com`,
   }
   let tempPassword = password
   let tempUser, tempToken
-  return new User(exampleUser) 
+  return new User(exampleUser)
   .generatePasswordHash(exampleUser.password)
   .then( user => user.save())
   .then( user => {
