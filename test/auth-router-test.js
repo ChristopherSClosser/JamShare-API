@@ -80,7 +80,7 @@ describe('testing auth-router', function(){
       it('should respond with status 409', (done) => {
         request.post(`${url}/api/signup`)
         .send({
-          username: exampleArtist.username,
+          username: mockArtist.username,
           password: exampleArtist.password,
           email: exampleArtist.email,
         })
@@ -99,7 +99,7 @@ describe('testing auth-router', function(){
         .send({
           username: exampleArtist.username,
           password: exampleArtist.password,
-          email: this.exampleArtist.email,
+          email: exampleArtist.email,
         })
         .end((err, res) => {
           expect(res.status).to.equal(409)
@@ -163,7 +163,7 @@ describe('testing auth-router', function(){
       it('should return a token', (done) => {
         request.get(`${url}/api/login`)
         // this has to be the same user and pass from mockArtist
-        .auth(this.exampleArtist.username, this.tempPassword)
+        .auth(exampleArtist.username, this.tempPassword)
         .end((err, res) => {
           if (err)
             return done(err)
@@ -207,7 +207,7 @@ describe('testing auth-router', function(){
       it('should respond with status 401', (done) => {
         request.get(`${url}/api/login`)
         // this has to be the same user and pass from mockArtist
-        .auth(this.exampleArtist.username, 'bad')
+        .auth(exampleArtist.username, 'bad')
         .end((err, res) => {
           expect(res.status).to.equal(401)
           expect(res.text).to.equal('UnauthorizedError')

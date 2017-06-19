@@ -16,9 +16,9 @@ const cleanDB = require('./lib/clean-db.js')
 const mockArtist = require('./lib/artist-mock.js')
 const serverCtrl = require('./lib/server-ctrl.js')
 const fuzzyRegex = require('../lib/fuzzy-regex.js')
-const mockGallery = require('./lib/gallery-mock.js')
-const mockManyPics = require('./lib/mock-many-pics.js')
-const mockManyGallerys = require('./lib/mock-many-gallerys.js')
+const mockSong = require('./lib/song-mock.js')
+const mockManyElements = require('./lib/mock-many-elements.js')
+const mockManySongs = require('./lib/mock-many-songs.js')
 //const mockManyEverything = require('./lib/mock-many-everything.js')
 const mockManyEverything = require('./lib/everything-mock.js')
 
@@ -26,12 +26,12 @@ const mockManyEverything = require('./lib/everything-mock.js')
 const url = `http://localhost:${process.env.PORT}`
   // config
 mongoose.Promise = Promise
-let exampleGallery = {
+let exampleSong = {
   name: 'beach adventure',
   desc: 'not enough sun screen ouch',
 }
 
-describe('test /api/gallery', function(){
+describe('test /api/song', function(){
   // start server at for this test file
   before(done => serverCtrl.serverUp(server, done))
   // stop server after this test file
@@ -39,19 +39,19 @@ describe('test /api/gallery', function(){
   // clean all models from db after each test
   afterEach(done => cleanDB(done))
 
-  describe('testing POST to /api/gallery', () => {
+  describe('testing POST to /api/song', () => {
     // create this.tempUser and this.tempToken
     describe('with valid token and body', () => {
       before(done => mockArtist.call(this, done))
-      it('should return a gallery', done => {
-        request.post(`${url}/api/gallery`)
-        .send(exampleGallery)
+      it('should return a song', done => {
+        request.post(`${url}/api/song`)
+        .send(exampleSong)
         .set({Authorization: `Bearer ${this.tempToken}`})
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleGallery.name)
-          expect(res.body.desc).to.equal(exampleGallery.desc)
+          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempUser._id.toString())
           let date = new Date(res.body.created).toString()
           expect(date).to.not.equal('Invalid Date')
@@ -63,8 +63,8 @@ describe('test /api/gallery', function(){
     describe('with invalid token', () => {
       before(done => mockArtist.call(this, done))
       it('should respond with status 401', done => {
-        request.post(`${url}/api/gallery`)
-        .send(exampleGallery)
+        request.post(`${url}/api/song`)
+        .send(exampleSong)
         .set({Authorization: `Bearer ${this.tempToken}bad`})
         .end((err, res) => {
           expect(res.status).to.equal(401)
@@ -77,8 +77,8 @@ describe('test /api/gallery', function(){
     describe('with invalid Bearer auth', () => {
       before(done => mockArtist.call(this, done))
       it('should respond with status 400', done => {
-        request.post(`${url}/api/gallery`)
-        .send(exampleGallery)
+        request.post(`${url}/api/song`)
+        .send(exampleSong)
         .set({Authorization: 'not bearer auth'})
         .end((err, res) => {
           expect(res.status).to.equal(400)
@@ -91,8 +91,8 @@ describe('test /api/gallery', function(){
     describe('with no Authorization header', () => {
       before(done => mockArtist.call(this, done))
       it('should respond with status 400', done => {
-        request.post(`${url}/api/gallery`)
-        .send(exampleGallery)
+        request.post(`${url}/api/song`)
+        .send(exampleSong)
         .end((err, res) => {
           expect(res.status).to.equal(400)
           expect(res.text).to.equal('BadRequestError')
@@ -104,9 +104,9 @@ describe('test /api/gallery', function(){
     describe('with no name', () => {
       before(done => mockArtist.call(this, done))
       it('should respond with status 400', done => {
-        request.post(`${url}/api/gallery`)
+        request.post(`${url}/api/song`)
         .set({Authorization: `Bearer ${this.tempToken}`})
-        .send({ desc: exampleGallery.desc})
+        .send({ desc: exampleSong.desc})
         .end((err, res) => {
           expect(res.status).to.equal(400)
           expect(res.text).to.equal('BadRequestError')
@@ -118,9 +118,9 @@ describe('test /api/gallery', function(){
     describe('with no desc', () => {
       before(done => mockArtist.call(this, done))
       it('should respond with status 400', done => {
-        request.post(`${url}/api/gallery`)
+        request.post(`${url}/api/song`)
         .set({Authorization: `Bearer ${this.tempToken}`})
-        .send({ name: exampleGallery.name})
+        .send({ name: exampleSong.name})
         .end((err, res) => {
           expect(res.status).to.equal(400)
           expect(res.text).to.equal('BadRequestError')
@@ -130,50 +130,50 @@ describe('test /api/gallery', function(){
     })
   })
 
-  describe('testing GET to /api/gallery/:id', () => {
-    // create this.tempToken, this.tempUser, this.tempGallery
+  describe('testing GET to /api/song/:id', () => {
+    // create this.tempToken, this.tempUser, this.tempSong
     describe('with valid token and id', function(){
-      before(done => mockGallery.call(this, done))
-      it('should return a gallery', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+      before(done => mockSong.call(this, done))
+      it('should return a song', done => {
+        request.get(`${url}/api/song/${this.tempSong._id}`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleGallery.name)
-          expect(res.body.desc).to.equal(exampleGallery.desc)
+          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempUser._id.toString())
           let date = new Date(res.body.created).toString()
-          expect(date).to.equal(this.tempGallery.created.toString())
+          expect(date).to.equal(this.tempSong.created.toString())
           done()
         })
       })
     })
 
-    describe('with many pictures', function(){
-      before(done => mockManyPics.call(this, 100, done))
-      it('should return a gallery', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+    describe('with many elementtures', function(){
+      before(done => mockManyElements.call(this, 100, done))
+      it('should return a song', done => {
+        request.get(`${url}/api/song/${this.tempSong._id}`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleGallery.name)
-          expect(res.body.desc).to.equal(exampleGallery.desc)
+          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempUser._id.toString())
-          expect(Array.isArray(res.body.pics)).to.equal(true)
-          expect(res.body.pics.length).to.equal(100)
+          expect(Array.isArray(res.body.elements)).to.equal(true)
+          expect(res.body.elements.length).to.equal(100)
           let date = new Date(res.body.created).toString()
-          expect(date).to.equal(this.tempGallery.created.toString())
-          for (let i=0; i< res.body.pics.length; i++){
-            expect(res.body.pics[i]._id.toString()).to.equal(this.tempPics[i]._id.toString())
-            expect(res.body.pics[i].name).to.equal(this.tempPics[i].name)
-            expect(res.body.pics[i].desc).to.equal(this.tempPics[i].desc)
-            expect(res.body.pics[i].imageURI).to.equal(this.tempPics[i].imageURI)
+          expect(date).to.equal(this.tempSong.created.toString())
+          for (let i=0; i< res.body.elements.length; i++){
+            expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[i]._id.toString())
+            expect(res.body.elements[i].name).to.equal(this.tempElements[i].name)
+            expect(res.body.elements[i].desc).to.equal(this.tempElements[i].desc)
+            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[i].imageURI)
           }
           done()
         })
@@ -181,141 +181,141 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?itemcount=10&itempage=2',  function(){
-      before(done => mockManyPics.call(this, 100, done))
-      it('should return a gallery', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}?itemcount=10&itempage=2`)
+      before(done => mockManyElements.call(this, 100, done))
+      it('should return a song', done => {
+        request.get(`${url}/api/song/${this.tempSong._id}?itemcount=10&itempage=2`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleGallery.name)
-          expect(res.body.desc).to.equal(exampleGallery.desc)
+          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempUser._id.toString())
-          expect(Array.isArray(res.body.pics)).to.equal(true)
-          expect(res.body.pics.length).to.equal(10)
+          expect(Array.isArray(res.body.elements)).to.equal(true)
+          expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
-          expect(date).to.equal(this.tempGallery.created.toString())
-          for (let i=0; i< res.body.pics.length; i++){
-            expect(res.body.pics[i]._id.toString()).to.equal(this.tempPics[i + 10 ]._id.toString())
-            expect(res.body.pics[i].name).to.equal(this.tempPics[i + 10].name)
-            expect(res.body.pics[i].desc).to.equal(this.tempPics[i + 10].desc)
-            expect(res.body.pics[i].imageURI).to.equal(this.tempPics[i + 10].imageURI)
+          expect(date).to.equal(this.tempSong.created.toString())
+          for (let i=0; i< res.body.elements.length; i++){
+            expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[i + 10 ]._id.toString())
+            expect(res.body.elements[i].name).to.equal(this.tempElements[i + 10].name)
+            expect(res.body.elements[i].desc).to.equal(this.tempElements[i + 10].desc)
+            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[i + 10].imageURI)
           }
           done()
         })
       })
     })
 
-    describe('with many pictures and ?itemcount=10', function(){
-      before(done => mockManyPics.call(this, 100, done))
-      it('should return a gallery', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}?itemcount=10`)
+    describe('with many elementtures and ?itemcount=10', function(){
+      before(done => mockManyElements.call(this, 100, done))
+      it('should return a song', done => {
+        request.get(`${url}/api/song/${this.tempSong._id}?itemcount=10`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleGallery.name)
-          expect(res.body.desc).to.equal(exampleGallery.desc)
+          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempUser._id.toString())
-          expect(Array.isArray(res.body.pics)).to.equal(true)
-          expect(res.body.pics.length).to.equal(10)
+          expect(Array.isArray(res.body.elements)).to.equal(true)
+          expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
-          expect(date).to.equal(this.tempGallery.created.toString())
-          for (let i=0; i< res.body.pics.length; i++){
-            expect(res.body.pics[i]._id.toString()).to.equal(this.tempPics[i]._id.toString())
-            expect(res.body.pics[i].name).to.equal(this.tempPics[i].name)
-            expect(res.body.pics[i].desc).to.equal(this.tempPics[i].desc)
-            expect(res.body.pics[i].imageURI).to.equal(this.tempPics[i].imageURI)
+          expect(date).to.equal(this.tempSong.created.toString())
+          for (let i=0; i< res.body.elements.length; i++){
+            expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[i]._id.toString())
+            expect(res.body.elements[i].name).to.equal(this.tempElements[i].name)
+            expect(res.body.elements[i].desc).to.equal(this.tempElements[i].desc)
+            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[i].imageURI)
           }
           done()
         })
       })
     })
 
-    describe('with many pictures and ?itemcount=10&itemsort=dsc', function(){
-      before(done => mockManyPics.call(this, 100, done))
-      it('should return a gallery', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}?itemcount=10&itemsort=dsc`)
+    describe('with many elementtures and ?itemcount=10&itemsort=dsc', function(){
+      before(done => mockManyElements.call(this, 100, done))
+      it('should return a song', done => {
+        request.get(`${url}/api/song/${this.tempSong._id}?itemcount=10&itemsort=dsc`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleGallery.name)
-          expect(res.body.desc).to.equal(exampleGallery.desc)
+          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempUser._id.toString())
-          expect(Array.isArray(res.body.pics)).to.equal(true)
-          expect(res.body.pics.length).to.equal(10)
+          expect(Array.isArray(res.body.elements)).to.equal(true)
+          expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
-          expect(date).to.equal(this.tempGallery.created.toString())
-          let tempPicsLength = this.tempPics.length
-          for (let i=0; i< res.body.pics.length; i++){
-            expect(res.body.pics[i]._id.toString()).to.equal(this.tempPics[tempPicsLength - 1 - i]._id.toString())
-            expect(res.body.pics[i].name).to.equal(this.tempPics[tempPicsLength - 1 - i].name)
-            expect(res.body.pics[i].desc).to.equal(this.tempPics[tempPicsLength - 1 - i].desc)
-            expect(res.body.pics[i].imageURI).to.equal(this.tempPics[tempPicsLength - 1 - i].imageURI)
+          expect(date).to.equal(this.tempSong.created.toString())
+          let tempElementsLength = this.tempElements.length
+          for (let i=0; i< res.body.elements.length; i++){
+            expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[tempElementsLength - 1 - i]._id.toString())
+            expect(res.body.elements[i].name).to.equal(this.tempElements[tempElementsLength - 1 - i].name)
+            expect(res.body.elements[i].desc).to.equal(this.tempElements[tempElementsLength - 1 - i].desc)
+            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[tempElementsLength - 1 - i].imageURI)
           }
           done()
         })
       })
     })
 
-    describe('with many pictures and ?itemcount=10&itemsort=dsc?itemoffset=1', function(){
-      before(done => mockManyPics.call(this, 100, done))
-      it('should return a gallery', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}?itemcount=10&itemsort=dsc&itemoffset=1`)
+    describe('with many elementtures and ?itemcount=10&itemsort=dsc?itemoffset=1', function(){
+      before(done => mockManyElements.call(this, 100, done))
+      it('should return a song', done => {
+        request.get(`${url}/api/song/${this.tempSong._id}?itemcount=10&itemsort=dsc&itemoffset=1`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleGallery.name)
-          expect(res.body.desc).to.equal(exampleGallery.desc)
+          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempUser._id.toString())
-          expect(Array.isArray(res.body.pics)).to.equal(true)
-          expect(res.body.pics.length).to.equal(10)
+          expect(Array.isArray(res.body.elements)).to.equal(true)
+          expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
-          expect(date).to.equal(this.tempGallery.created.toString())
-          let tempPicsLength = this.tempPics.length
-          for (let i=0; i< res.body.pics.length; i++){
-            expect(res.body.pics[i]._id.toString()).to.equal(this.tempPics[tempPicsLength - 2 - i]._id.toString())
-            expect(res.body.pics[i].name).to.equal(this.tempPics[tempPicsLength - 2 - i].name)
-            expect(res.body.pics[i].desc).to.equal(this.tempPics[tempPicsLength - 2 - i].desc)
-            expect(res.body.pics[i].imageURI).to.equal(this.tempPics[tempPicsLength - 2 - i].imageURI)
+          expect(date).to.equal(this.tempSong.created.toString())
+          let tempElementsLength = this.tempElements.length
+          for (let i=0; i< res.body.elements.length; i++){
+            expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[tempElementsLength - 2 - i]._id.toString())
+            expect(res.body.elements[i].name).to.equal(this.tempElements[tempElementsLength - 2 - i].name)
+            expect(res.body.elements[i].desc).to.equal(this.tempElements[tempElementsLength - 2 - i].desc)
+            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[tempElementsLength - 2 - i].imageURI)
           }
           done()
         })
       })
     })
 
-    describe('with many pictures and ?itemcount=10&itemoffset=1', function(){
-      before(done => mockManyPics.call(this, 100, done))
-      it('should return a gallery', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}?itemcount=10&itemoffset=1`)
+    describe('with many elementtures and ?itemcount=10&itemoffset=1', function(){
+      before(done => mockManyElements.call(this, 100, done))
+      it('should return a song', done => {
+        request.get(`${url}/api/song/${this.tempSong._id}?itemcount=10&itemoffset=1`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleGallery.name)
-          expect(res.body.desc).to.equal(exampleGallery.desc)
+          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempUser._id.toString())
-          expect(Array.isArray(res.body.pics)).to.equal(true)
-          expect(res.body.pics.length).to.equal(10)
+          expect(Array.isArray(res.body.elements)).to.equal(true)
+          expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
-          expect(date).to.equal(this.tempGallery.created.toString())
-          for (let i=0; i< res.body.pics.length; i++){
-            expect(res.body.pics[i]._id.toString()).to.equal(this.tempPics[i + 1]._id.toString())
-            expect(res.body.pics[i].name).to.equal(this.tempPics[i + 1].name)
-            expect(res.body.pics[i].desc).to.equal(this.tempPics[i + 1].desc)
-            expect(res.body.pics[i].imageURI).to.equal(this.tempPics[i + 1].imageURI)
+          expect(date).to.equal(this.tempSong.created.toString())
+          for (let i=0; i< res.body.elements.length; i++){
+            expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[i + 1]._id.toString())
+            expect(res.body.elements[i].name).to.equal(this.tempElements[i + 1].name)
+            expect(res.body.elements[i].desc).to.equal(this.tempElements[i + 1].desc)
+            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[i + 1].imageURI)
           }
           done()
         })
@@ -323,9 +323,9 @@ describe('test /api/gallery', function(){
     })
 
     describe('with invalid token', function(){
-      before(done => mockGallery.call(this, done))
+      before(done => mockSong.call(this, done))
       it('should respond with status 401', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+        request.get(`${url}/api/song/${this.tempSong._id}`)
         .set({
           Authorization: `Bearer ${this.tempToken}bad`,
         })
@@ -338,9 +338,9 @@ describe('test /api/gallery', function(){
     })
 
     describe('with invalid Bearer auth', function(){
-      before(done => mockGallery.call(this, done))
+      before(done => mockSong.call(this, done))
       it('should respond with status 400', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+        request.get(`${url}/api/song/${this.tempSong._id}`)
         .set({ Authorization: 'bad request' })
         .end((err, res) => {
           expect(res.status).to.equal(400)
@@ -351,9 +351,9 @@ describe('test /api/gallery', function(){
     })
 
     describe('with no Authorization header', function(){
-      before(done => mockGallery.call(this, done))
+      before(done => mockSong.call(this, done))
       it('should respond with status 400', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+        request.get(`${url}/api/song/${this.tempSong._id}`)
         .end((err, res) => {
           expect(res.status).to.equal(400)
           expect(res.text).to.equal('BadRequestError')
@@ -363,9 +363,9 @@ describe('test /api/gallery', function(){
     })
 
     describe('with invalid id', function(){
-      before(done => mockGallery.call(this, done))
-      it('should return a gallery', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}bad`)
+      before(done => mockSong.call(this, done))
+      it('should return a song', done => {
+        request.get(`${url}/api/song/${this.tempSong._id}bad`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
@@ -378,7 +378,7 @@ describe('test /api/gallery', function(){
     })
 
     describe('with user whos been removed', function(){
-      before(done => mockGallery.call(this, done))
+      before(done => mockSong.call(this, done))
       before(done => {
         Artist.remove({})
         .then(() => done())
@@ -386,7 +386,7 @@ describe('test /api/gallery', function(){
       })
 
       it('should respond with status 401', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+        request.get(`${url}/api/song/${this.tempSong._id}`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
@@ -399,13 +399,13 @@ describe('test /api/gallery', function(){
     })
 
     describe('with wrong user', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
       // overwrite user, password, and token with new user
       before(done => mockArtist.call(this, done))
 
       it('should respond with status 401', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+        request.get(`${url}/api/song/${this.tempSong._id}`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
@@ -418,13 +418,13 @@ describe('test /api/gallery', function(){
     })
   })
 
-  describe('testing PUT /api/gallery/:galleryID', function(){
+  describe('testing PUT /api/song/:songID', function(){
     describe('update name ande desc', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
 
-      it('should return a gallery', done => {
-        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+      it('should return a song', done => {
+        request.put(`${url}/api/song/${this.tempSong._id}`)
         .send({
           name: 'hello',
           desc: 'cool',
@@ -443,12 +443,12 @@ describe('test /api/gallery', function(){
     })
 
     describe('update name ande desc', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
       before(done => mockArtist.call(this, done))
 
-      it('should return a gallery', done => {
-        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+      it('should return a song', done => {
+        request.put(`${url}/api/song/${this.tempSong._id}`)
         .send({
           name: 'hello',
           desc: 'cool',
@@ -464,11 +464,11 @@ describe('test /api/gallery', function(){
     })
 
     describe('update name', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
 
-      it('should return a gallery', done => {
-        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+      it('should return a song', done => {
+        request.put(`${url}/api/song/${this.tempSong._id}`)
         .send({
           name: 'hello',
         })
@@ -479,18 +479,18 @@ describe('test /api/gallery', function(){
           if (err) return done(err)
           expect(res.status).to.equal(200)
           expect(res.body.name).to.equal('hello')
-          expect(res.body.desc).to.equal(this.tempGallery.desc)
+          expect(res.body.desc).to.equal(this.tempSong.desc)
           done()
         })
       })
     })
 
     describe('update desc', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
 
-      it('should return a gallery', done => {
-        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+      it('should return a song', done => {
+        request.put(`${url}/api/song/${this.tempSong._id}`)
         .send({
           desc: 'cool',
         })
@@ -500,7 +500,7 @@ describe('test /api/gallery', function(){
         .end((err, res) => {
           if (err) return done(err)
           expect(res.status).to.equal(200)
-          expect(res.body.name).to.equal(this.tempGallery.name)
+          expect(res.body.name).to.equal(this.tempSong.name)
           expect(res.body.desc).to.equal('cool')
           done()
         })
@@ -508,11 +508,11 @@ describe('test /api/gallery', function(){
     })
 
     describe('with bad galeryID', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
 
-      it('should return a gallery', done => {
-        request.put(`${url}/api/gallery/${this.tempGallery._id}bad`)
+      it('should return a song', done => {
+        request.put(`${url}/api/song/${this.tempSong._id}bad`)
         .send({
           desc: 'cool',
         })
@@ -528,11 +528,11 @@ describe('test /api/gallery', function(){
     })
 
     describe('with bad token', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
 
       it('should respond with status 401', done => {
-        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+        request.put(`${url}/api/song/${this.tempSong._id}`)
         .send({
           desc: 'cool',
         })
@@ -548,11 +548,11 @@ describe('test /api/gallery', function(){
     })
 
     describe('witn no auth', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
 
       it('should respond with status 400', done => {
-        request.put(`${url}/api/gallery/${this.tempGallery._id}bad`)
+        request.put(`${url}/api/song/${this.tempSong._id}bad`)
         .send({
           desc: 'cool',
         })
@@ -565,12 +565,12 @@ describe('test /api/gallery', function(){
     })
   })
 
-  describe('testing DELETE /api/gallery/:galleryID', function(){
+  describe('testing DELETE /api/song/:songID', function(){
     describe('should respond with status 204', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
-      it('should return a gallery', done => {
-        request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
+      it('should return a song', done => {
+        request.delete(`${url}/api/song/${this.tempSong._id}`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
@@ -581,11 +581,11 @@ describe('test /api/gallery', function(){
       })
     })
 
-    describe('with invalid galleryID', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
-      it('should return a gallery', done => {
-        request.delete(`${url}/api/gallery/${this.tempGallery._id}bad`)
+    describe('with invalid songID', function(){
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
+      it('should return a song', done => {
+        request.delete(`${url}/api/song/${this.tempSong._id}bad`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(404)
@@ -595,12 +595,12 @@ describe('test /api/gallery', function(){
       })
     })
 
-    describe('with invalid galleryID', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+    describe('with invalid songID', function(){
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
       before(done => mockArtist.call(this, done))
-      it('should return a gallery', done => {
-        request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
+      it('should return a song', done => {
+        request.delete(`${url}/api/song/${this.tempSong._id}`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(401)
@@ -610,10 +610,10 @@ describe('test /api/gallery', function(){
     })
 
     describe('with invalid token', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
       it('should respond with status 401', done => {
-        request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
+        request.delete(`${url}/api/song/${this.tempSong._id}`)
         .set({
           Authorization: `Bearer ${this.tempToken}bad`,
         })
@@ -626,10 +626,10 @@ describe('test /api/gallery', function(){
     })
 
     describe('witn no auth', function(){
-      // mock user, password, token, and gallery
-      before(done => mockGallery.call(this, done))
+      // mock user, password, token, and song
+      before(done => mockSong.call(this, done))
       it('should respond with status 400', done => {
-        request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
+        request.delete(`${url}/api/song/${this.tempSong._id}`)
         .end((err, res) => {
           expect(res.status).to.equal(400)
           expect(res.text).to.equal('BadRequestError')
@@ -639,11 +639,11 @@ describe('test /api/gallery', function(){
     })
   })
 
-  describe('testing GET /api/gallery', function(){
+  describe('testing GET /api/song', function(){
     describe('with valid request', function(){
-      before( done => mockManyGallerys.call(this, 100, done))
+      before( done => mockManySongs.call(this, 100, done))
       it('should respond with status 400', done => {
-        request.get(`${url}/api/gallery`)
+        request.get(`${url}/api/song`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
@@ -655,16 +655,16 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?pagesize=10', function(){
-      before( done => mockManyGallerys.call(this, 100, done))
+      before( done => mockManySongs.call(this, 100, done))
       it('should return 10 notes', done => {
-        request.get(`${url}/api/gallery?pagesize=5`)
+        request.get(`${url}/api/song?pagesize=5`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(5)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempGallerys[i].name)
+            expect(res.body[i].name).to.equal(this.tempSongs[i].name)
           }
           done()
         })
@@ -672,16 +672,16 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?sort=dsc', function(){
-      before( done => mockManyGallerys.call(this, 100, done))
+      before( done => mockManySongs.call(this, 100, done))
       it('should return 10 notes', done => {
-        request.get(`${url}/api/gallery?sort=dsc`)
+        request.get(`${url}/api/song?sort=dsc`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempGallerys[this.tempGallerys.length - i - 1].name)
+            expect(res.body[i].name).to.equal(this.tempSongs[this.tempSongs.length - i - 1].name)
           }
           done()
         })
@@ -689,17 +689,17 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?sort=dsc?offset=3', function(){
-      before( done => mockManyGallerys.call(this, 100, done))
+      before( done => mockManySongs.call(this, 100, done))
       it('should return 10 notes', done => {
-        request.get(`${url}/api/gallery?sort=dsc&offset=3`)
+        request.get(`${url}/api/song?sort=dsc&offset=3`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            let index = this.tempGallerys.length - i - 4
-            expect(res.body[i].name).to.equal(this.tempGallerys[index].name)
+            let index = this.tempSongs.length - i - 4
+            expect(res.body[i].name).to.equal(this.tempSongs[index].name)
           }
           done()
         })
@@ -707,16 +707,16 @@ describe('test /api/gallery', function(){
     })
 
     describe('with offset=1', function(){
-      before( done => mockManyGallerys.call(this, 100, done))
+      before( done => mockManySongs.call(this, 100, done))
       it('should return 10 notes', done => {
-        request.get(`${url}/api/gallery?offset=1`)
+        request.get(`${url}/api/song?offset=1`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempGallerys[i + 1].name)
+            expect(res.body[i].name).to.equal(this.tempSongs[i + 1].name)
           }
           done()
         })
@@ -724,16 +724,16 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?page=2', function(){
-      before( done => mockManyGallerys.call(this, 100, done))
+      before( done => mockManySongs.call(this, 100, done))
       it('should return 10 notes', done => {
-        request.get(`${url}/api/gallery?page=2`)
+        request.get(`${url}/api/song?page=2`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempGallerys[i + 50].name)
+            expect(res.body[i].name).to.equal(this.tempSongs[i + 50].name)
           }
           done()
         })
@@ -741,16 +741,16 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?page=3&?offset=1', function(){
-      before( done => mockManyGallerys.call(this, 150, done))
+      before( done => mockManySongs.call(this, 150, done))
       it('should return 10 notes', done => {
-        request.get(`${url}/api/gallery?page=3&offset=1`)
+        request.get(`${url}/api/song?page=3&offset=1`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(49)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempGallerys[i + 101].name)
+            expect(res.body[i].name).to.equal(this.tempSongs[i + 101].name)
           }
           done()
         })
@@ -758,16 +758,16 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?page=-1', function(){
-      before( done => mockManyGallerys.call(this, 150, done))
+      before( done => mockManySongs.call(this, 150, done))
       it('should return 10 notes', done => {
-        request.get(`${url}/api/gallery?page=-1`)
+        request.get(`${url}/api/song?page=-1`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempGallerys[i].name)
+            expect(res.body[i].name).to.equal(this.tempSongs[i].name)
           }
           done()
         })
@@ -775,16 +775,16 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?pagesize=-1', function(){
-      before( done => mockManyGallerys.call(this, 50, done))
+      before( done => mockManySongs.call(this, 50, done))
       it('should return 10 notes', done => {
-        request.get(`${url}/api/gallery?pagesize=-1`)
+        request.get(`${url}/api/song?pagesize=-1`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(1)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempGallerys[i].name)
+            expect(res.body[i].name).to.equal(this.tempSongs[i].name)
           }
           done()
         })
@@ -792,16 +792,16 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?pagesize=300', function(){
-      before( done => mockManyGallerys.call(this, 300, done))
+      before( done => mockManySongs.call(this, 300, done))
       it('should return 10 notes', done => {
-        request.get(`${url}/api/gallery?pagesize=250`)
+        request.get(`${url}/api/song?pagesize=250`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(250)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempGallerys[i].name)
+            expect(res.body[i].name).to.equal(this.tempSongs[i].name)
           }
           done()
         })
@@ -809,9 +809,9 @@ describe('test /api/gallery', function(){
     })
 
     describe('with invalid token', function(){
-      before( done => mockManyGallerys.call(this, 50, done))
+      before( done => mockManySongs.call(this, 50, done))
       it('should respond with status 401', done => {
-        request.get(`${url}/api/gallery`)
+        request.get(`${url}/api/song`)
         .set({ Authorization: `Bearer ${this.tempToken}bad` })
         .end((err, res) => {
           expect(res.status).to.equal(401)
@@ -822,9 +822,9 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?name=co', function(){
-      before( done => mockManyGallerys.call(this, 100, done))
+      before( done => mockManySongs.call(this, 100, done))
       it('should respond nodes with fuzzy match co', done => {
-        request.get(`${url}/api/gallery?name=co`)
+        request.get(`${url}/api/song?name=co`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
@@ -840,9 +840,9 @@ describe('test /api/gallery', function(){
     })
 
     describe('with ?desc=co', function(){
-      before( done => mockManyGallerys.call(this, 100, done))
+      before( done => mockManySongs.call(this, 100, done))
       it('should respond nodes with fuzzy match co', done => {
-        request.get(`${url}/api/gallery?desc=co`)
+        request.get(`${url}/api/song?desc=co`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).to.equal(200)
@@ -858,17 +858,17 @@ describe('test /api/gallery', function(){
     })
   })
 
-  describe('testing GET /api/public/gallery', function(){
+  describe('testing GET /api/public/song', function(){
     describe('with valid request', function(){
       let options = {
         users: 4,
-        gallerys: 3,
-        pics: 4,
+        songs: 3,
+        elements: 4,
       }
 
       before( done => mockManyEverything.call(this, options, done))
       it('should respond nodes with fuzzy match co', done => {
-        request.get(`${url}/api/public/gallery`)
+        request.get(`${url}/api/public/song`)
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
@@ -880,13 +880,13 @@ describe('test /api/gallery', function(){
     describe('with ?username=lu', function(){
       let options = {
         users: 30,
-        gallerys: 1,
-        pics: 1,
+        songs: 1,
+        elements: 1,
       }
 
       before( done => mockManyEverything.call(this, options, done))
       it('should respond nodes with fuzzy match lu', done => {
-        request.get(`${url}/api/public/gallery?username=lu`)
+        request.get(`${url}/api/public/song?username=lu`)
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
@@ -903,13 +903,13 @@ describe('test /api/gallery', function(){
     describe('with ?name=lu', function(){
       let options = {
         users: 5,
-        gallerys: 10,
-        pics: 1,
+        songs: 10,
+        elements: 1,
       }
 
       before( done => mockManyEverything.call(this, options, done))
       it('should respond nodes with fuzzy match lu', done => {
-        request.get(`${url}/api/public/gallery?name=lu`)
+        request.get(`${url}/api/public/song?name=lu`)
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
@@ -926,18 +926,18 @@ describe('test /api/gallery', function(){
     describe('with ?itemcount=4', function(){
       let options = {
         users: 2,
-        gallerys: 5,
-        pics: 10,
+        songs: 5,
+        elements: 10,
       }
 
       before( done => mockManyEverything.call(this, options, done))
-      it('each galery should have 4 pics', done => {
-        request.get(`${url}/api/public/gallery?itemcount=4`)
+      it('each galery should have 4 elements', done => {
+        request.get(`${url}/api/public/song?itemcount=4`)
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].pics.length).to.equal(4)
+            expect(res.body[i].elements.length).to.equal(4)
           }
           done()
         })
@@ -947,19 +947,19 @@ describe('test /api/gallery', function(){
     describe('with ?pagesize=4', function(){
       let options = {
         users: 2,
-        gallerys: 5,
-        pics: 10,
+        songs: 5,
+        elements: 10,
       }
 
       before( done => mockManyEverything.call(this, options, done))
-      it('show top 4 galerys with 10 pics', done => {
-        request.get(`${url}/api/public/gallery?pagesize=4`)
+      it('show top 4 galerys with 10 elements', done => {
+        request.get(`${url}/api/public/song?pagesize=4`)
         .end((err, res) => {
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(4)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].pics.length).to.equal(10)
+            expect(res.body[i].elements.length).to.equal(10)
           }
           done()
         })

@@ -2,23 +2,23 @@
 
 const Promise = require('bluebird')
 const lorem = require('lorem-ipsum')
-const debug = require('debug')('jamshare-api:gallery-mock-everything')
+const debug = require('debug')('jamshare-api:song-mock-everything')
 
-const Pic = require('../../model/pic.js')
+const Element = require('../../model/element.js')
 const Artist = require('../../model/artist.js')
-const Gallery = require('../../model/gallery.js')
+const Song = require('../../model/song.js')
 
 module.exports = function(options, done){
-  debug('mocking artists, gallerys, and pics')
+  debug('mocking artists, songs, and elements')
   if(!checkOptions)
     return done('bad options')
 
   // make usercount
-  // make gallerycount for each user
-  // make pictures for each gallery
+  // make songcount for each user
+  // make elementtures for each song
   this.tempArtistData = []
-  this.tempGallerys = []
-  this.tempPics = []
+  this.tempSongs = []
+  this.tempElements = []
 
   let makeArtists = []
   for(var i=0; i<options.users; i++){
@@ -28,31 +28,31 @@ module.exports = function(options, done){
   Promise.all(makeArtists)
   .map( userdata => {
     this.tempArtistData.push(userdata)
-    let makeArtistGallerys = []
+    let makeArtistSongs = []
     let userID = userdata.tempUser._id.toString()
     let username  = userdata.tempUser.username
-    for(var i=0; i<options.gallerys; i++){
-      makeArtistGallerys.push(mockAGallery(userID, username))
+    for(var i=0; i<options.songs; i++){
+      makeArtistSongs.push(mockASong(userID, username))
     }
-    return Promise.all(makeArtistGallerys)
+    return Promise.all(makeArtistSongs)
   })
-  .map(artistGallerys => {
-    return Promise.resolve(artistGallerys)
-    .map(gallery => {
-      let makeGalleryPics = []
-      let userID = gallery.userID.toString()
-      let username = gallery.username
-      for(var i=0; i<options.pics; i++){
-        makeGalleryPics.push(mockAPic(userID, username))
+  .map(artistSongs => {
+    return Promise.resolve(artistSongs)
+    .map(song => {
+      let makeSongElements = []
+      let userID = song.userID.toString()
+      let username = song.username
+      for(var i=0; i<options.elements; i++){
+        makeSongElements.push(mockAElement(userID, username))
       }
-      return Promise.all(makeGalleryPics)
-      .map( pic => {
-        this.tempPics.push(pic)
-        let picID = pic._id.toString()
-        gallery.pics.push(picID)
-        return gallery.save()
+      return Promise.all(makeSongElements)
+      .map( element => {
+        this.tempElements.push(element)
+        let elementID = element._id.toString()
+        song.elements.push(elementID)
+        return song.save()
       })
-      .each(gallery => this.tempGallerys.push(gallery))
+      .each(song => this.tempSongs.push(song))
     })
   })
   .then(() => done())
@@ -62,9 +62,9 @@ module.exports = function(options, done){
 function checkOptions(options){
   if (!options.users)
     return false
-  if (!options.gallerys)
+  if (!options.songs)
     return false
-  if (!options.pics)
+  if (!options.elements)
     return false
   return true
 }
@@ -96,20 +96,20 @@ function mockAUser(){
   })
 }
 
-function mockAGallery(userID, username){
+function mockASong(userID, username){
   let name = lorem({count: 2, units: 'word'})
   let desc = lorem({count: 2, units: 'sentence'})
-  let exampleGallery = { name, desc , userID, username}
-  return new Gallery(exampleGallery).save()
+  let exampleSong = { name, desc , userID, username}
+  return new Song(exampleSong).save()
 }
 
-function mockAPic(userID, username){
+function mockAElement(userID, username){
   let name = lorem({count: 2, units: 'word'})
   let desc = lorem({count: 2, units: 'sentence'})
   let uri = lorem({count: 5, units: 'word'}).split(' ').join('-')
   let objectKey = lorem({count: 5, units: 'word'}).split(' ').join('')
   let imageURI = `https://${uri}/${objectKey}`
-  let examplePicData = {
+  let exampleElementData = {
     name,
     desc,
     userID,
@@ -118,5 +118,5 @@ function mockAPic(userID, username){
     objectKey,
     created: new Date(),
   }
-  return new Pic(examplePicData).save()
+  return new Element(exampleElementData).save()
 }

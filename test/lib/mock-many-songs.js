@@ -1,32 +1,32 @@
 'use strict'
 
-const debug = require('debug')('jamshare-api:gallery-mock')
+const debug = require('debug')('jamshare-api:song-mock')
 const artistMock = require('./artist-mock.js')
-const Gallery = require('../../model/gallery.js')
+const Song = require('../../model/song.js')
 const lorem = require('lorem-ipsum')
 
 module.exports = function(count, done){
-  debug(`mock ${count}gallerys`)
+  debug(`mock ${count}songs`)
   artistMock.call(this, err => {
     if (err) return done(err)
-    let galleryMocks = []
+    let songMocks = []
     let userID = this.tempUser._id.toString()
     let username = this.tempUser.username
     for(var i=0; i<count; i++){
-      galleryMocks.push(mockAGallery(userID, username))
+      songMocks.push(mockASong(userID, username))
     }
-    Promise.all(galleryMocks)
-    .then(tempGallerys => {
-      this.tempGallerys = tempGallerys
+    Promise.all(songMocks)
+    .then(tempSongs => {
+      this.tempSongs = tempSongs
       done()
     })
     .catch(done)
   })
 }
 
-function mockAGallery(userID, username){
+function mockASong(userID, username){
   let name = lorem({count: 2, units: 'word'})
   let desc = lorem({count: 2, units: 'sentence'})
-  let exampleGallery = { name, desc , userID, username}
-  return new Gallery(exampleGallery).save()
+  let exampleSong = { name, desc , userID, username}
+  return new Song(exampleSong).save()
 }

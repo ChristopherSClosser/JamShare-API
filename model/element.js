@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-const picSchema = mongoose.Schema({
+const elementSchema = mongoose.Schema({
   name: {type: String, required: true},
   desc: {type: String, required: true},
   username: {type: String, required: true},
@@ -12,8 +12,8 @@ const picSchema = mongoose.Schema({
   created: {type: Date, default: Date.now},
 });
 
-module.exports = mongoose.model('pic', picSchema);
+module.exports = mongoose.model('element', elementSchema);
 
-//Pic.schema.path('name').validate(function(val) {
+//Element.schema.path('name').validate(function(val) {
   //return /(jamshare)/.test(val);
 //});
