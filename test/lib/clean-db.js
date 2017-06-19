@@ -1,6 +1,6 @@
 'use strict'
 
-const debug = require('debug')('slugram:clean-db')
+const debug = require('debug')('jamshare-api:clean-db')
 
 const Pic = require('../../model/pic.js')
 const User = require('../../model/user.js')

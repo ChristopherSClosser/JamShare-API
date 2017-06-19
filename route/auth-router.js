@@ -3,7 +3,7 @@
 const Router = require('express').Router
 const createError = require('http-errors')
 const jsonParser = require('body-parser').json()
-const debug = require('debug')('slugram:auth-router')
+const debug = require('debug')('jamshare-api:auth-router')
 const basicAuth = require('../lib/basic-auth-middleware.js')
 const User = require('../model/user.js')
 
@@ -18,9 +18,9 @@ authRouter.post('/api/signup', jsonParser, function(req, res, next){
   let user = new User(req.body)
 
   // checkfor password before running generatePasswordHash
-  if (!password) 
+  if (!password)
     return next(createError(400, 'requires password'))
-  if (password.length < 8) 
+  if (password.length < 8)
     return next(createError(400, 'password must be 8 characters'))
 
   user.generatePasswordHash(password)
@@ -40,4 +40,3 @@ authRouter.get('/api/login', basicAuth, function(req, res, next){
   .then( token => res.send(token))
   .catch(next)
 })
-

@@ -2,7 +2,7 @@
 
 const Promise = require('bluebird')
 const lorem = require('lorem-ipsum')
-const debug = require('debug')('slugram:gallery-mock-everything')
+const debug = require('debug')('jamshare-api:gallery-mock-everything')
 
 const Pic = require('../../model/pic.js')
 const User = require('../../model/user.js')
