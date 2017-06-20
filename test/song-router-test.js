@@ -40,7 +40,7 @@ describe('test /api/song', function(){
   afterEach(done => cleanDB(done))
 
   describe('testing POST to /api/song', () => {
-    // create this.tempUser and this.tempToken
+    // create this.tempArtist and this.tempToken
     describe('with valid token and body', () => {
       before(done => mockArtist.call(this, done))
       it('should return a song', done => {
@@ -52,7 +52,7 @@ describe('test /api/song', function(){
             return done(err)
           expect(res.body.name).to.equal(exampleSong.name)
           expect(res.body.desc).to.equal(exampleSong.desc)
-          expect(res.body.userID).to.equal(this.tempUser._id.toString())
+          expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           let date = new Date(res.body.created).toString()
           expect(date).to.not.equal('Invalid Date')
           done()
@@ -131,7 +131,7 @@ describe('test /api/song', function(){
   })
 
   describe('testing GET to /api/song/:id', () => {
-    // create this.tempToken, this.tempUser, this.tempSong
+    // create this.tempToken, this.tempArtist, this.tempSong
     describe('with valid token and id', function(){
       before(done => mockSong.call(this, done))
       it('should return a song', done => {
@@ -144,7 +144,7 @@ describe('test /api/song', function(){
             return done(err)
           expect(res.body.name).to.equal(exampleSong.name)
           expect(res.body.desc).to.equal(exampleSong.desc)
-          expect(res.body.userID).to.equal(this.tempUser._id.toString())
+          expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           let date = new Date(res.body.created).toString()
           expect(date).to.equal(this.tempSong.created.toString())
           done()
@@ -164,7 +164,7 @@ describe('test /api/song', function(){
             return done(err)
           expect(res.body.name).to.equal(exampleSong.name)
           expect(res.body.desc).to.equal(exampleSong.desc)
-          expect(res.body.userID).to.equal(this.tempUser._id.toString())
+          expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
           expect(res.body.elements.length).to.equal(100)
           let date = new Date(res.body.created).toString()
@@ -192,7 +192,7 @@ describe('test /api/song', function(){
             return done(err)
           expect(res.body.name).to.equal(exampleSong.name)
           expect(res.body.desc).to.equal(exampleSong.desc)
-          expect(res.body.userID).to.equal(this.tempUser._id.toString())
+          expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
           expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
@@ -220,7 +220,7 @@ describe('test /api/song', function(){
             return done(err)
           expect(res.body.name).to.equal(exampleSong.name)
           expect(res.body.desc).to.equal(exampleSong.desc)
-          expect(res.body.userID).to.equal(this.tempUser._id.toString())
+          expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
           expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
@@ -248,7 +248,7 @@ describe('test /api/song', function(){
             return done(err)
           expect(res.body.name).to.equal(exampleSong.name)
           expect(res.body.desc).to.equal(exampleSong.desc)
-          expect(res.body.userID).to.equal(this.tempUser._id.toString())
+          expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
           expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
@@ -277,7 +277,7 @@ describe('test /api/song', function(){
             return done(err)
           expect(res.body.name).to.equal(exampleSong.name)
           expect(res.body.desc).to.equal(exampleSong.desc)
-          expect(res.body.userID).to.equal(this.tempUser._id.toString())
+          expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
           expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
@@ -306,7 +306,7 @@ describe('test /api/song', function(){
             return done(err)
           expect(res.body.name).to.equal(exampleSong.name)
           expect(res.body.desc).to.equal(exampleSong.desc)
-          expect(res.body.userID).to.equal(this.tempUser._id.toString())
+          expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
           expect(res.body.elements.length).to.equal(10)
           let date = new Date(res.body.created).toString()
@@ -398,10 +398,10 @@ describe('test /api/song', function(){
       })
     })
 
-    describe('with wrong user', function(){
-      // mock user, password, token, and song
+    describe('with wrong artist', function(){
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
-      // overwrite user, password, and token with new user
+      // overwrite username, password, and token with new artist
       before(done => mockArtist.call(this, done))
 
       it('should respond with status 401', done => {
@@ -420,7 +420,7 @@ describe('test /api/song', function(){
 
   describe('testing PUT /api/song/:songID', function(){
     describe('update name ande desc', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
 
       it('should return a song', done => {
@@ -443,7 +443,7 @@ describe('test /api/song', function(){
     })
 
     describe('update name ande desc', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
       before(done => mockArtist.call(this, done))
 
@@ -464,7 +464,7 @@ describe('test /api/song', function(){
     })
 
     describe('update name', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
 
       it('should return a song', done => {
@@ -486,7 +486,7 @@ describe('test /api/song', function(){
     })
 
     describe('update desc', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
 
       it('should return a song', done => {
@@ -507,8 +507,8 @@ describe('test /api/song', function(){
       })
     })
 
-    describe('with bad galeryID', function(){
-      // mock user, password, token, and song
+    describe('with bad songID', function(){
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
 
       it('should return a song', done => {
@@ -528,7 +528,7 @@ describe('test /api/song', function(){
     })
 
     describe('with bad token', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
 
       it('should respond with status 401', done => {
@@ -548,7 +548,7 @@ describe('test /api/song', function(){
     })
 
     describe('witn no auth', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
 
       it('should respond with status 400', done => {
@@ -567,7 +567,7 @@ describe('test /api/song', function(){
 
   describe('testing DELETE /api/song/:songID', function(){
     describe('should respond with status 204', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
       it('should return a song', done => {
         request.delete(`${url}/api/song/${this.tempSong._id}`)
@@ -582,7 +582,7 @@ describe('test /api/song', function(){
     })
 
     describe('with invalid songID', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
       it('should return a song', done => {
         request.delete(`${url}/api/song/${this.tempSong._id}bad`)
@@ -596,7 +596,7 @@ describe('test /api/song', function(){
     })
 
     describe('with invalid songID', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
       before(done => mockArtist.call(this, done))
       it('should return a song', done => {
@@ -610,7 +610,7 @@ describe('test /api/song', function(){
     })
 
     describe('with invalid token', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
       it('should respond with status 401', done => {
         request.delete(`${url}/api/song/${this.tempSong._id}`)
@@ -626,7 +626,7 @@ describe('test /api/song', function(){
     })
 
     describe('witn no auth', function(){
-      // mock user, password, token, and song
+      // mock artist, password, token, and song
       before(done => mockSong.call(this, done))
       it('should respond with status 400', done => {
         request.delete(`${url}/api/song/${this.tempSong._id}`)
@@ -861,7 +861,7 @@ describe('test /api/song', function(){
   describe('testing GET /api/public/song', function(){
     describe('with valid request', function(){
       let options = {
-        users: 4,
+        artists: 4,
         songs: 3,
         elements: 4,
       }
@@ -879,7 +879,7 @@ describe('test /api/song', function(){
 
     describe('with ?username=lu', function(){
       let options = {
-        users: 30,
+        artists: 30,
         songs: 1,
         elements: 1,
       }
@@ -902,7 +902,7 @@ describe('test /api/song', function(){
 
     describe('with ?name=lu', function(){
       let options = {
-        users: 5,
+        artists: 5,
         songs: 10,
         elements: 1,
       }
@@ -925,13 +925,13 @@ describe('test /api/song', function(){
 
     describe('with ?itemcount=4', function(){
       let options = {
-        users: 2,
+        artists: 2,
         songs: 5,
         elements: 10,
       }
 
       before( done => mockManyEverything.call(this, options, done))
-      it('each galery should have 4 elements', done => {
+      it('each song should have 4 elements', done => {
         request.get(`${url}/api/public/song?itemcount=4`)
         .end((err, res) => {
           expect(res.status).to.equal(200)
@@ -946,13 +946,13 @@ describe('test /api/song', function(){
 
     describe('with ?pagesize=4', function(){
       let options = {
-        users: 2,
+        artists: 2,
         songs: 5,
         elements: 10,
       }
 
       before( done => mockManyEverything.call(this, options, done))
-      it('show top 4 galerys with 10 elements', done => {
+      it('show top 4 songs with 10 elements', done => {
         request.get(`${url}/api/public/song?pagesize=4`)
         .end((err, res) => {
           expect(res.status).to.equal(200)

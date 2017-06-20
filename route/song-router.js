@@ -55,7 +55,7 @@ songRouter.put('/api/song/:id', bearerAuth, jsonParser, function(req, res, next)
   .catch(err => Promise.reject(createError(404, err.message)))
   .then(song => {
     if (song.userID.toString() !== req.artist._id.toString())
-      return Promise.reject(createError(401, 'not users song'))
+      return Promise.reject(createError(401, 'artist\'s song'))
     let options = { runValidators: true, new: true}
     return Song.findByIdAndUpdate(req.params.id, req.body, options)
   })
@@ -72,7 +72,7 @@ songRouter.delete('/api/song/:id', bearerAuth, function(req, res, next){
   .then(song => {
     tempGallrey = song
     if (song.userID.toString() !== req.artist._id.toString())
-      return Promise.reject(createError(401, 'not users song'))
+      return Promise.reject(createError(401, 'not artist\'s song'))
     let deletePhotos = []
 
     song.elements.forEach(element => {

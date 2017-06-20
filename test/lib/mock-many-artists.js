@@ -1,11 +1,11 @@
 'use strict'
 
-const debug = require('debug')('jamshare-api:mock-many-users');
+const debug = require('debug')('jamshare-api:mock-many-artists');
 const Artist = require('../../model/artist.js');
 const lorem = require('lorem-ipsum');
 
 module.exports = function(count, done){
-  debug(`creating ${count} users`);
+  debug(`creating ${count} artists`);
   let artistMocks = [];
 
   for(var i=0; i<count; i++){
@@ -13,8 +13,8 @@ module.exports = function(count, done){
   }
 
   Promise.all(artistMocks)
-  .then( tempUsers => {
-    this.tempUsers = tempUsers;
+  .then( tempArtists => {
+    this.tempArtists = tempArtists;
     done();
   })
   .catch(done);
@@ -31,18 +31,18 @@ function mockAUser(){
     email: `${email}@jammer.com`,
   };
   let tempPassword = password;
-  let tempUser, tempToken;
+  let tempArtist, tempToken;
   return new Artist(exampleArtist)
   .generatePasswordHash(exampleArtist.password)
-  .then( user => user.save())
-  .then( user => {
-    tempUser = user;
-    return user.generateToken();
+  .then( artist => artist.save())
+  .then( artist => {
+    tempArtist = artist;
+    return artist.generateToken();
   })
   .then( token => {
     tempToken = token;
     return {
-      tempUser,
+      tempArtist,
       tempToken,
       tempPassword,
     };
