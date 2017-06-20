@@ -10,8 +10,8 @@ module.exports = function(count, done){
   artistMock.call(this, err => {
     if (err) return done(err)
     let songMocks = []
-    let userID = this.tempUser._id.toString()
-    let username = this.tempUser.username
+    let userID = this.tempArtist._id.toString()
+    let username = this.tempArtist.username
     for(var i=0; i<count; i++){
       songMocks.push(mockASong(userID, username))
     }

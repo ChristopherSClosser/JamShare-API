@@ -327,7 +327,7 @@ describe('testing element-router', function(){
 
     describe('with ?username=lop', function(){
       let options = {
-        users: 20,
+        artists: 20,
         songs: 2,
         elements: 5,
       }

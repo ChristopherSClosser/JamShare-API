@@ -13,24 +13,24 @@ module.exports = function(options, done){
   if(!checkOptions)
     return done('bad options')
 
-  // make usercount
-  // make songcount for each user
+  // make artistcount
+  // make songcount for each artist
   // make elementtures for each song
   this.tempArtistData = []
   this.tempSongs = []
   this.tempElements = []
 
   let makeArtists = []
-  for(var i=0; i<options.users; i++){
+  for(var i=0; i<options.artists; i++){
     makeArtists.push(mockAUser())
   }
 
   Promise.all(makeArtists)
-  .map( userdata => {
-    this.tempArtistData.push(userdata)
+  .map( artistdata => {
+    this.tempArtistData.push(artistdata)
     let makeArtistSongs = []
-    let userID = userdata.tempUser._id.toString()
-    let username  = userdata.tempUser.username
+    let userID = artistdata.tempArtist._id.toString()
+    let username  = artistdata.tempArtist.username
     for(var i=0; i<options.songs; i++){
       makeArtistSongs.push(mockASong(userID, username))
     }
@@ -60,7 +60,7 @@ module.exports = function(options, done){
 }
 
 function checkOptions(options){
-  if (!options.users)
+  if (!options.artists)
     return false
   if (!options.songs)
     return false
@@ -79,17 +79,17 @@ function mockAUser(){
     email: `${email}@jammer.com`,
   }
   let tempPassword = password
-  let tempUser, tempToken
+  let tempArtist, tempToken
   return new Artist(exampleArtist)
   .generatePasswordHash(tempPassword)
-  .then( user => {
-    tempUser = user
-    return user.generateToken()
+  .then( artist => {
+    tempArtist = artist
+    return artist.generateToken()
   })
   .then( token => {
     tempToken = token
     return {
-      tempUser,
+      tempArtist,
       tempToken,
       tempPassword,
     }

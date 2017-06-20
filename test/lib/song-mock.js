@@ -14,8 +14,8 @@ module.exports = function(done){
   artistMock.call(this, err => {
     if (err)
       return done(err);
-    exampleSong.userID = this.tempUser._id.toString();
-    exampleSong.username = this.tempUser.username;
+    exampleSong.userID = this.tempArtist._id.toString();
+    exampleSong.username = this.tempArtist.username;
     new Song(exampleSong).save()
     .then( song => {
       this.tempSong = song;
