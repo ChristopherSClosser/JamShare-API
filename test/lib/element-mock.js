@@ -23,8 +23,8 @@ module.exports = function(done){
 
   songMock.call(this, err => {
     if (err) return done(err)
-    exampleElementData.username = this.tempUser.username
-    exampleElementData.userID = this.tempUser._id.toString()
+    exampleElementData.username = this.tempArtist.username
+    exampleElementData.userID = this.tempArtist._id.toString()
     exampleElementData.songID = this.tempSong._id.toString()
     new Element(exampleElementData).save()
     .then( element => {

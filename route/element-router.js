@@ -47,8 +47,8 @@ elementRouter.post('/api/song/:songID/element', bearerAuth, upload.single('file'
   // first check that the song exists
   // then upload image
   // remove the image that multer stored on the local disk
-  // then store monogo Element
-  // then respond to user
+  // then store mongo Element
+  // then respond to artist
 
   let tempSong, tempElement
   Song.findById(req.params.songID)
@@ -133,7 +133,7 @@ elementRouter.get('/api/public/element', pageQuery, function(req, res, next){
   .catch(next)
 })
 
- // this route is private and only returns a users elementtures
+ // this route is private and only returns an artist's elements
 elementRouter.get('/api/element', bearerAuth, pageQuery, function(req, res, next){
   let fuzzyFields = [ 'name', 'desc' ]
   let query = fuzzyQuery(fuzzyFields, req.query)

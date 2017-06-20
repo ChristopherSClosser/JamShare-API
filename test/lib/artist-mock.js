@@ -17,10 +17,10 @@ module.exports = function(done){
   this.tempPassword = password;
   new Artist(exampleArtist)
   .generatePasswordHash(exampleArtist.password)
-  .then( user => user.save())
-  .then( user => {
-    this.tempUser = user;
-    return user.generateToken();
+  .then( artist => artist.save())
+  .then( artist => {
+    this.tempArtist = artist;
+    return artist.generateToken();
   })
   .then( token => {
     this.tempToken = token;

@@ -162,7 +162,7 @@ describe('testing auth-router', function(){
     //   before(done => mockArtist.call(this, done))
     //   it('should return a token', (done) => {
     //     request.get(`${url}/api/login`)
-    //     // this has to be the same user and pass from mockArtist
+    //     // this has to be the same username and password from mockArtist
     //     .auth(exampleArtist.username, this.tempPassword)
     //     .end((err, res) => {
     //       if (err)
@@ -178,7 +178,7 @@ describe('testing auth-router', function(){
       before(done => mockArtist.call(this, done))
       it('should respond with status 401', (done) => {
         request.get(`${url}/api/login`)
-        // this has to be the same user and pass from mockArtist
+        // this has to be the same username and password from mockArtist
         .auth('bad', this.tempPassword)
         .end((err, res) => {
           expect(res.status).to.equal(401)
@@ -192,7 +192,7 @@ describe('testing auth-router', function(){
       before(done => mockArtist.call(this, done))
       it('should respond with status 401', (done) => {
         request.get(`${url}/api/login`)
-        // this has to be the same user and pass from mockArtist
+        // this has to be the same username and password from mockArtist
         .auth('', this.tempPassword)
         .end((err, res) => {
           expect(res.status).to.equal(401)
@@ -206,7 +206,7 @@ describe('testing auth-router', function(){
       before(done => mockArtist.call(this, done))
       it('should respond with status 401', (done) => {
         request.get(`${url}/api/login`)
-        // this has to be the same user and pass from mockArtist
+        // this has to be the same username and password from mockArtist
         .auth(exampleArtist.username, 'bad')
         .end((err, res) => {
           expect(res.status).to.equal(401)
