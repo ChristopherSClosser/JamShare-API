@@ -137,7 +137,7 @@ describe('testing element-router', function(){
     })
   })
 
-  describe('testing DELETE /api/song/:gallryID/element/:elementID', function(){
+  describe('testing DELETE /api/song/:songID/element/:elementID', function(){
     describe('with valid token and ids', function(){
       before(done => elementMock.call(this, done))
 
