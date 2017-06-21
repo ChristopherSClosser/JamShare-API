@@ -25,8 +25,8 @@ module.exports = function(count, done){
 }
 
 function mockASong(userID, username){
-  let name = lorem({count: 2, units: 'word'})
+  let title = lorem({count: 2, units: 'word'})
   let desc = lorem({count: 2, units: 'sentence'})
-  let exampleSong = { name, desc , userID, username}
+  let exampleSong = { title, desc , userID, username}
   return new Song(exampleSong).save()
 }

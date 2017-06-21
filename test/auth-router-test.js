@@ -32,11 +32,13 @@ describe('testing auth-router', function(){
   describe('testing POST /api/signup', function(){
     describe('with valid body', function(){
       it('should return a token', (done) => {
+        console.log('hitting here', exampleArtist);
         request.post(`${url}/api/signup`)
         .send(exampleArtist)
         .end((err, res) => {
-          if (err)
+          if (err) {
             return done(err)
+          }
           expect(res.status).to.equal(200)
           expect(!!res.text).to.equal(true)
           done()

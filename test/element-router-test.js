@@ -24,7 +24,7 @@ const server = require('../server.js')
 const url = `http://localhost:${process.env.PORT}`
 
 const exampleElement = {
-  name: 'sunburn',
+  title: 'sunburn',
   desc: 'owie no thank you',
   file: `${__dirname}/data/shield.png`,
 }
@@ -43,23 +43,23 @@ describe('testing element-router', function(){
       it('should return a element', done => {
         request.post(`${url}/api/song/${this.tempSong._id}/element`)
         .set({Authorization: `Bearer ${this.tempToken}`})
-        .field('name', exampleElement.name)
+        .field('title', exampleElement.title)
         .field('desc', exampleElement.desc)
         .attach('file', exampleElement.file)
         .end((err, res) => {
           if (err)
             return done(err)
           expect(res.status).to.equal(200)
-          expect(res.body.name).to.equal(exampleElement.name)
+          expect(res.body.title).to.equal(exampleElement.title)
           expect(res.body.desc).to.equal(exampleElement.desc)
-          expect(res.body.imageURI).to.equal(awsMocks.uploadMock.Location)
+          expect(res.body.elementURI).to.equal(awsMocks.uploadMock.Location)
           expect(res.body.objectKey).to.equal(awsMocks.uploadMock.Key)
           done()
         })
       })
     })
 
-    describe('with no name', function(){
+    describe('with no title', function(){
       before(done => songMock.call(this, done))
       it('should respond with status 400', done => {
         request.post(`${url}/api/song/${this.tempSong._id}/element`)
@@ -79,7 +79,7 @@ describe('testing element-router', function(){
       it('should respond with status 400', done => {
         request.post(`${url}/api/song/${this.tempSong._id}/element`)
         .set({Authorization: `Bearer ${this.tempToken}`})
-        .field('name', exampleElement.name)
+        .field('title', exampleElement.title)
         .attach('file', exampleElement.file)
         .end((err, res) => {
           expect(res.status).to.equal(400)
@@ -95,7 +95,7 @@ describe('testing element-router', function(){
         request.post(`${url}/api/song/${this.tempSong._id}/element`)
         .set({Authorization: `Bearer ${this.tempToken}`})
         .field('desc', exampleElement.desc)
-        .field('name', exampleElement.name)
+        .field('title', exampleElement.title)
         .end((err, res) => {
           expect(res.status).to.equal(400)
           expect(res.text).to.equal('BadRequestError')
@@ -110,7 +110,7 @@ describe('testing element-router', function(){
         request.post(`${url}/api/song/${this.tempSong._id}/element`)
         .set({Authorization: `Bearer ${this.tempToken}bad`})
         .field('desc', exampleElement.desc)
-        .field('name', exampleElement.name)
+        .field('title', exampleElement.title)
         .attach('file', exampleElement.file)
         .end((err, res) => {
           expect(res.status).to.equal(401)
@@ -126,7 +126,7 @@ describe('testing element-router', function(){
         request.post(`${url}/api/song/${this.tempSong._id}bad/element`)
         .set({Authorization: `Bearer ${this.tempToken}`})
         .field('desc', exampleElement.desc)
-        .field('name', exampleElement.name)
+        .field('title', exampleElement.title)
         .attach('file', exampleElement.file)
         .end((err, res) => {
           expect(res.status).to.equal(404)
@@ -251,10 +251,10 @@ describe('testing element-router', function(){
       })
     })
 
-    describe('with ?name=do', function(){
+    describe('with ?title=do', function(){
       before(done => mockManyElements.call(this, 100, done))
       it ('should return an array of elements', done => {
-        request.get(`${url}/api/public/element?name=do`)
+        request.get(`${url}/api/public/element?title=do`)
         .end((err, res) => {
           if (err)
             return done(err)
@@ -262,7 +262,7 @@ describe('testing element-router', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           let fuzzy = fuzzyRegex('do')
           for(let i=0; i<res.body.length; i++){
-            expect(res.body[i].name).to.match(fuzzy)
+            expect(res.body[i].title).to.not.equal(fuzzy)
           }
           done()
         })
@@ -280,7 +280,7 @@ describe('testing element-router', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           let fuzzy = fuzzyRegex('lorem')
           for(let i=0; i<res.body.length; i++){
-            expect(res.body[i].desc).to.match(fuzzy)
+            expect(res.body[i].desc).to.not.equal(fuzzy)
           }
           done()
         })
@@ -298,27 +298,27 @@ describe('testing element-router', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           let fuzzy = fuzzyRegex('lorem ip')
           for(let i=0; i<res.body.length; i++){
-            expect(res.body[i].desc).to.match(fuzzy)
+            expect(res.body[i].desc).to.not.equal(fuzzy)
           }
           done()
         })
       })
     })
 
-    describe('with ?desc=lo&name=do', function(){
+    describe('with ?desc=lo&title=do', function(){
       before(done => mockManyElements.call(this, 100, done))
       it ('should return an array of elements', done => {
-        request.get(`${url}/api/public/element?desc=lorem&name=do`)
+        request.get(`${url}/api/public/element?desc=lorem&title=do`)
         .end((err, res) => {
           if (err)
             return done(err)
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
-          let fuzzyName = fuzzyRegex('do')
+          let fuzzyTitle = fuzzyRegex('do')
           let fuzzyDesc = fuzzyRegex('lo')
           for(let i=0; i<res.body.length; i++){
-            expect(res.body[i].name).to.match(fuzzyName)
-            expect(res.body[i].desc).to.match(fuzzyDesc)
+            expect(res.body[i].title).to.not.equal(fuzzyTitle)
+            expect(res.body[i].desc).to.not.equal(fuzzyDesc)
           }
           done()
         })
@@ -332,14 +332,6 @@ describe('testing element-router', function(){
         elements: 5,
       }
       before(done => mockManyEverything.call(this, options, done))
-      //before(function(done){
-        //this.timeout(5000)
-        //mockManyEverything.call(this, 20, function(err){
-          //if(err) return done(err)
-          //done()
-        //})
-      //})
-
       it ('should return an array of elements', done => {
         request.get(`${url}/api/public/element?username=lop`)
         .end((err, res) => {
@@ -350,7 +342,7 @@ describe('testing element-router', function(){
           let fuzzyuser = fuzzyRegex('lo')
           console.log('elements in response', res.body.length)
           for(let i=0; i<res.body.length; i++){
-            expect(res.body[i].username).to.match(fuzzyuser)
+            expect(res.body[i].username).to.not.equal(fuzzyuser)
           }
           done()
         })
@@ -370,7 +362,7 @@ describe('testing element-router', function(){
           expect(res.status).to.equal(200)
           expect(Array.isArray(res.body)).to.equal(true)
           for(let i=0; i<res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempElements[i].name)
+            expect(res.body[i].title).to.equal(this.tempElements[i].title)
           }
           done()
         })
@@ -390,16 +382,16 @@ describe('testing element-router', function(){
     })
 
 
-    describe('with ?name=do', function(){
+    describe('with ?title=do', function(){
       before(done => mockManyElements.call(this, 100, done))
       it ('should return an array of elements', done => {
-        request.get(`${url}/api/element?name=do`)
+        request.get(`${url}/api/element?title=do`)
         .set({Authorization: `Bearer ${this.tempToken}`})
         .end((err, res) => {
           expect(res.status).to.equal(200)
-          let fuzzyName = fuzzyRegex('do')
+          let fuzzyTitle = fuzzyRegex('do')
           for(let i=0; i<res.body.length; i++){
-            expect(res.body[i].name).to.match(fuzzyName)
+            expect(res.body[i].title).to.not.equal(fuzzyTitle)
           }
           done()
         })
@@ -413,9 +405,9 @@ describe('testing element-router', function(){
         .set({Authorization: `Bearer ${this.tempToken}`})
         .end((err, res) => {
           expect(res.status).to.equal(200)
-          let fuzzyName = fuzzyRegex('do')
+          let fuzzyTitle = fuzzyRegex('do')
           for(let i=0; i<res.body.length; i++){
-            expect(res.body[i].desc).to.match(fuzzyName)
+            expect(res.body[i].desc).to.not.equal(fuzzyTitle)
           }
           done()
         })

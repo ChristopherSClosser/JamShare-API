@@ -11,13 +11,13 @@ const lorem = require('lorem-ipsum')
 
 module.exports = function(done){
   debug('creating mock element')
-  let name = lorem({count: 2, units: 'word'})
+  let title = lorem({count: 2, units: 'word'})
   let desc = lorem({count: 2, units: 'sentence'})
   let exampleElementData = {
-    name,
+    title,
     desc,
     created: new Date(),
-    imageURI: awsMocks.uploadMock.Location,
+    elementURI: awsMocks.uploadMock.Location,
     objectKey: awsMocks.uploadMock.Key,
   }
 

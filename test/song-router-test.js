@@ -27,7 +27,7 @@ const url = `http://localhost:${process.env.PORT}`
   // config
 mongoose.Promise = Promise
 let exampleSong = {
-  name: 'beach adventure',
+  title: 'beach adventure',
   desc: 'not enough sun screen ouch',
 }
 
@@ -50,7 +50,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.title).to.equal(exampleSong.title)
           expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           let date = new Date(res.body.created).toString()
@@ -120,7 +120,7 @@ describe('test /api/song', function(){
       it('should respond with status 400', done => {
         request.post(`${url}/api/song`)
         .set({Authorization: `Bearer ${this.tempToken}`})
-        .send({ name: exampleSong.name})
+        .send({ title: exampleSong.title})
         .end((err, res) => {
           expect(res.status).to.equal(400)
           expect(res.text).to.equal('BadRequestError')
@@ -142,7 +142,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.title).to.equal(exampleSong.title)
           expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           let date = new Date(res.body.created).toString()
@@ -162,7 +162,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.title).to.equal(exampleSong.title)
           expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
@@ -171,9 +171,9 @@ describe('test /api/song', function(){
           expect(date).to.equal(this.tempSong.created.toString())
           for (let i=0; i< res.body.elements.length; i++){
             expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[i]._id.toString())
-            expect(res.body.elements[i].name).to.equal(this.tempElements[i].name)
+            expect(res.body.elements[i].title).to.equal(this.tempElements[i].title)
             expect(res.body.elements[i].desc).to.equal(this.tempElements[i].desc)
-            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[i].imageURI)
+            expect(res.body.elements[i].elementURI).to.equal(this.tempElements[i].elementURI)
           }
           done()
         })
@@ -190,7 +190,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.title).to.equal(exampleSong.title)
           expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
@@ -199,9 +199,9 @@ describe('test /api/song', function(){
           expect(date).to.equal(this.tempSong.created.toString())
           for (let i=0; i< res.body.elements.length; i++){
             expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[i + 10 ]._id.toString())
-            expect(res.body.elements[i].name).to.equal(this.tempElements[i + 10].name)
+            expect(res.body.elements[i].title).to.equal(this.tempElements[i + 10].title)
             expect(res.body.elements[i].desc).to.equal(this.tempElements[i + 10].desc)
-            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[i + 10].imageURI)
+            expect(res.body.elements[i].elementURI).to.equal(this.tempElements[i + 10].elementURI)
           }
           done()
         })
@@ -218,7 +218,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.title).to.equal(exampleSong.title)
           expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
@@ -227,9 +227,9 @@ describe('test /api/song', function(){
           expect(date).to.equal(this.tempSong.created.toString())
           for (let i=0; i< res.body.elements.length; i++){
             expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[i]._id.toString())
-            expect(res.body.elements[i].name).to.equal(this.tempElements[i].name)
+            expect(res.body.elements[i].title).to.equal(this.tempElements[i].title)
             expect(res.body.elements[i].desc).to.equal(this.tempElements[i].desc)
-            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[i].imageURI)
+            expect(res.body.elements[i].elementURI).to.equal(this.tempElements[i].elementURI)
           }
           done()
         })
@@ -246,7 +246,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.title).to.equal(exampleSong.title)
           expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
@@ -256,9 +256,9 @@ describe('test /api/song', function(){
           let tempElementsLength = this.tempElements.length
           for (let i=0; i< res.body.elements.length; i++){
             expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[tempElementsLength - 1 - i]._id.toString())
-            expect(res.body.elements[i].name).to.equal(this.tempElements[tempElementsLength - 1 - i].name)
+            expect(res.body.elements[i].title).to.equal(this.tempElements[tempElementsLength - 1 - i].title)
             expect(res.body.elements[i].desc).to.equal(this.tempElements[tempElementsLength - 1 - i].desc)
-            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[tempElementsLength - 1 - i].imageURI)
+            expect(res.body.elements[i].elementURI).to.equal(this.tempElements[tempElementsLength - 1 - i].elementURI)
           }
           done()
         })
@@ -275,7 +275,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.title).to.equal(exampleSong.title)
           expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
@@ -285,9 +285,9 @@ describe('test /api/song', function(){
           let tempElementsLength = this.tempElements.length
           for (let i=0; i< res.body.elements.length; i++){
             expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[tempElementsLength - 2 - i]._id.toString())
-            expect(res.body.elements[i].name).to.equal(this.tempElements[tempElementsLength - 2 - i].name)
+            expect(res.body.elements[i].title).to.equal(this.tempElements[tempElementsLength - 2 - i].title)
             expect(res.body.elements[i].desc).to.equal(this.tempElements[tempElementsLength - 2 - i].desc)
-            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[tempElementsLength - 2 - i].imageURI)
+            expect(res.body.elements[i].elementURI).to.equal(this.tempElements[tempElementsLength - 2 - i].elementURI)
           }
           done()
         })
@@ -304,7 +304,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err)
             return done(err)
-          expect(res.body.name).to.equal(exampleSong.name)
+          expect(res.body.title).to.equal(exampleSong.title)
           expect(res.body.desc).to.equal(exampleSong.desc)
           expect(res.body.userID).to.equal(this.tempArtist._id.toString())
           expect(Array.isArray(res.body.elements)).to.equal(true)
@@ -313,9 +313,9 @@ describe('test /api/song', function(){
           expect(date).to.equal(this.tempSong.created.toString())
           for (let i=0; i< res.body.elements.length; i++){
             expect(res.body.elements[i]._id.toString()).to.equal(this.tempElements[i + 1]._id.toString())
-            expect(res.body.elements[i].name).to.equal(this.tempElements[i + 1].name)
+            expect(res.body.elements[i].title).to.equal(this.tempElements[i + 1].title)
             expect(res.body.elements[i].desc).to.equal(this.tempElements[i + 1].desc)
-            expect(res.body.elements[i].imageURI).to.equal(this.tempElements[i + 1].imageURI)
+            expect(res.body.elements[i].elementURI).to.equal(this.tempElements[i + 1].elementURI)
           }
           done()
         })
@@ -426,7 +426,7 @@ describe('test /api/song', function(){
       it('should return a song', done => {
         request.put(`${url}/api/song/${this.tempSong._id}`)
         .send({
-          name: 'hello',
+          title: 'hello',
           desc: 'cool',
         })
         .set({
@@ -435,7 +435,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if(err) return done(err)
           expect(res.status).to.equal(200)
-          expect(res.body.name).to.equal('hello')
+          expect(res.body.title).to.equal('hello')
           expect(res.body.desc).to.equal('cool')
           done()
         })
@@ -450,7 +450,7 @@ describe('test /api/song', function(){
       it('should return a song', done => {
         request.put(`${url}/api/song/${this.tempSong._id}`)
         .send({
-          name: 'hello',
+          title: 'hello',
           desc: 'cool',
         })
         .set({
@@ -470,7 +470,7 @@ describe('test /api/song', function(){
       it('should return a song', done => {
         request.put(`${url}/api/song/${this.tempSong._id}`)
         .send({
-          name: 'hello',
+          title: 'hello',
         })
         .set({
           Authorization: `Bearer ${this.tempToken}`,
@@ -478,7 +478,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err) return done(err)
           expect(res.status).to.equal(200)
-          expect(res.body.name).to.equal('hello')
+          expect(res.body.title).to.equal('hello')
           expect(res.body.desc).to.equal(this.tempSong.desc)
           done()
         })
@@ -500,7 +500,7 @@ describe('test /api/song', function(){
         .end((err, res) => {
           if (err) return done(err)
           expect(res.status).to.equal(200)
-          expect(res.body.name).to.equal(this.tempSong.name)
+          expect(res.body.title).to.equal(this.tempSong.title)
           expect(res.body.desc).to.equal('cool')
           done()
         })
@@ -664,7 +664,7 @@ describe('test /api/song', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(5)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempSongs[i].name)
+            expect(res.body[i].title).to.equal(this.tempSongs[i].title)
           }
           done()
         })
@@ -681,7 +681,7 @@ describe('test /api/song', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempSongs[this.tempSongs.length - i - 1].name)
+            expect(res.body[i].title).to.equal(this.tempSongs[this.tempSongs.length - i - 1].title)
           }
           done()
         })
@@ -699,7 +699,7 @@ describe('test /api/song', function(){
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
             let index = this.tempSongs.length - i - 4
-            expect(res.body[i].name).to.equal(this.tempSongs[index].name)
+            expect(res.body[i].title).to.equal(this.tempSongs[index].title)
           }
           done()
         })
@@ -716,7 +716,7 @@ describe('test /api/song', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempSongs[i + 1].name)
+            expect(res.body[i].title).to.equal(this.tempSongs[i + 1].title)
           }
           done()
         })
@@ -733,7 +733,7 @@ describe('test /api/song', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempSongs[i + 50].name)
+            expect(res.body[i].title).to.equal(this.tempSongs[i + 50].title)
           }
           done()
         })
@@ -750,7 +750,7 @@ describe('test /api/song', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(49)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempSongs[i + 101].name)
+            expect(res.body[i].title).to.equal(this.tempSongs[i + 101].title)
           }
           done()
         })
@@ -767,7 +767,7 @@ describe('test /api/song', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(50)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempSongs[i].name)
+            expect(res.body[i].title).to.equal(this.tempSongs[i].title)
           }
           done()
         })
@@ -784,7 +784,7 @@ describe('test /api/song', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(1)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempSongs[i].name)
+            expect(res.body[i].title).to.equal(this.tempSongs[i].title)
           }
           done()
         })
@@ -801,7 +801,7 @@ describe('test /api/song', function(){
           expect(Array.isArray(res.body)).to.equal(true)
           expect(res.body.length).to.equal(250)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.equal(this.tempSongs[i].name)
+            expect(res.body[i].title).to.equal(this.tempSongs[i].title)
           }
           done()
         })
@@ -832,7 +832,7 @@ describe('test /api/song', function(){
           console.log('matching notes', res.body.length)
           let fuzzyName = fuzzyRegex('co')
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.match(fuzzyName)
+            expect(res.body[i].title).to.not.equal(fuzzyName)
           }
           done()
         })
@@ -850,7 +850,7 @@ describe('test /api/song', function(){
           console.log('matching notes', res.body.length)
           let fuzzyName = fuzzyRegex('co')
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].desc).to.match(fuzzyName)
+            expect(res.body[i].desc).to.not.equal(fuzzyName)
           }
           done()
         })
@@ -893,7 +893,7 @@ describe('test /api/song', function(){
           let fuzzy = fuzzyRegex('lu')
           console.log('matches found', res.body.length)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].username).to.match(fuzzy)
+            expect(res.body[i].username).to.not.equal(fuzzy)
           }
           done()
         })
@@ -916,7 +916,7 @@ describe('test /api/song', function(){
           let fuzzy = fuzzyRegex('lu')
           console.log('matches found', res.body.length)
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.match(fuzzy)
+            expect(res.body[i].title).to.not.equal(fuzzy)
           }
           done()
         })

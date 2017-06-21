@@ -1,47 +1,47 @@
-'use strict'
+'use strict';
 
 // npm modules
-const cors = require('cors')
-const dotenv = require('dotenv')
-const morgan = require('morgan')
-const express = require('express')
-const Promise = require('bluebird')
-const mongoose = require('mongoose')
-const debug = require('debug')('jamshare-api:sever')
+const cors = require('cors');
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const express = require('express');
+const Promise = require('bluebird');
+const mongoose = require('mongoose');
+const debug = require('debug')('jamshare-api:sever');
 
 // app modules
-const elementRouter = require('./route/element-router.js')
-const authRouter = require('./route/auth-router.js')
-const songRouter = require('./route/song-router.js')
-const errorMiddleware = require('./lib/error-middleware.js')
+const elementRouter = require('./route/element-router.js');
+const authRouter = require('./route/auth-router.js');
+const songRouter = require('./route/song-router.js');
+const errorMiddleware = require('./lib/error-middleware.js');
 
 // load env vars
-dotenv.load()
+dotenv.load();
 
 // setup mongoose
-mongoose.Promise = Promise
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.Promise = Promise;
+mongoose.connect(process.env.MONGODB_URI);
 
 // module constants
-const PORT = process.env.PORT
-const app = express()
+const PORT = process.env.PORT;
+const app = express();
 
 
 // app middleware
-app.use(cors())
-let production = process.env.NODE_ENV === 'production'
-let morganFormat = production ? 'common' : 'dev'
-app.use(morgan(morganFormat))
+app.use(cors());
+let production = process.env.NODE_ENV === 'production';
+let morganFormat = production ? 'common' : 'dev';
+app.use(morgan(morganFormat));
 
 // app routes
-app.use(elementRouter)
-app.use(authRouter)
-app.use(songRouter)
-app.use(errorMiddleware)
+app.use(elementRouter);
+app.use(authRouter);
+app.use(songRouter);
+app.use(errorMiddleware);
 
 // start server
 const server = module.exports = app.listen(PORT , () => {
-  debug(`server up on ${PORT}`)
-})
+  debug(`server up on ${PORT}`);
+});
 
-server.isRunning = true
+server.isRunning = true;

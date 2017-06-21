@@ -36,17 +36,17 @@ module.exports = function(count, done){
 }
 
 function mockAElement(userID, username){
-  let name = lorem({count: 2, units: 'word'})
+  let title = lorem({count: 2, units: 'word'})
   let desc = lorem({count: 2, units: 'sentence'})
   let uri = lorem({count: 5, units: 'word'}).split(' ').join('-')
   let objectKey = lorem({count: 5, units: 'word'}).split(' ').join('')
-  let imageURI = `https://${uri}/${objectKey}`
+  let elementURI = `https://${uri}/${objectKey}`
   let exampleElementData = {
-    name,
+    title,
     desc,
     userID,
     username,
-    imageURI,
+    elementURI,
     objectKey,
     created: new Date(),
   }

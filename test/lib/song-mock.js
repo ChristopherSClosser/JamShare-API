@@ -8,7 +8,7 @@ const Song = require('../../model/song.js');
 module.exports = function(done){
   debug('create mock song');
   let exampleSong = {
-    name: 'beach adventure',
+    title: 'beach adventure',
     desc: 'not enough sun screen ouch',
   };
   artistMock.call(this, err => {
