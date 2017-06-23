@@ -132,6 +132,6 @@ songRouter.get('/api/public/song', pageQueries, itemQueries, function(req, res, 
 songRouter.get('/api/public/songs', function(req, res, next){
   debug('GET /api/public/songs')
   Song.find()
-  .then(songs => res.songs)
+  .then(songs => res.json(songs))
   .catch(next)
 })
