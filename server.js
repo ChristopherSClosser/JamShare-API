@@ -13,6 +13,7 @@ const debug = require('debug')('jamshare-api:sever')
 const elementRouter = require('./route/element-router.js')
 const authRouter = require('./route/auth-router.js')
 const songRouter = require('./route/song-router.js')
+const profileRouter = require('./route/profile-router.js')
 const errorMiddleware = require('./lib/error-middleware.js')
 
 // load env vars
@@ -37,6 +38,7 @@ app.use(morgan(morganFormat))
 app.use(elementRouter)
 app.use(authRouter)
 app.use(songRouter)
+app.use(profileRouter)
 app.use(errorMiddleware)
 
 // start server
