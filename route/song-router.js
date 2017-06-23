@@ -65,12 +65,12 @@ songRouter.put('/api/song/:id', bearerAuth, jsonParser, function(req, res, next)
 
 songRouter.delete('/api/song/:id', bearerAuth, function(req, res, next){
   debug('DELETE /api/song/:id')
-  let tempGallrey = null
+  let tempSong = null
   Song.findById(req.params.id)
   .populate('elements')
   .catch(err => Promise.reject(createError(404, err.message)))
   .then(song => {
-    tempGallrey = song
+    tempSong = song
     if (song.userID.toString() !== req.artist._id.toString())
       return Promise.reject(createError(401, 'not artist\'s song'))
     let deletePhotos = []
@@ -86,7 +86,7 @@ songRouter.delete('/api/song/:id', bearerAuth, function(req, res, next){
 
     return Promise.all(deletePhotos)
   })
-  .then(() => tempGallrey.remove())
+  .then(() => tempSong.remove())
   .then(() => res.sendStatus(204))
   .catch(next)
 })
@@ -107,7 +107,7 @@ songRouter.get('/api/song', bearerAuth, pageQueries, itemQueries, function(req, 
     },
   })
   .sort({_id: req.query.sort}).skip(req.query.offset).limit(req.query.pagesize)
-  .then(galleries => res.json(galleries))
+  .then(songs => res.json(songs))
   .catch(next)
 })
 
@@ -126,6 +126,6 @@ songRouter.get('/api/public/song', pageQueries, itemQueries, function(req, res, 
     },
   })
   .sort({_id: req.query.sort}).skip(req.query.offset).limit(req.query.pagesize)
-  .then(galleries => res.json(galleries))
+  .then(songs => res.json(songs))
   .catch(next)
 })
