@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/ChristopherSClosser/JamShare-API.svg?branch=master)](https://travis-ci.org/ChristopherSClosser/JamShare-API)
-[![Coverage Status](https://coveralls.io/repos/github/ChristopherSClosser/JamShare-API/badge.svg?branch=master)](https://coveralls.io/github/ChristopherSClosser/JamShare-API?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/ChristopherSClosser/JamShare-API/badge.svg?branch=chris-cover)](https://coveralls.io/github/ChristopherSClosser/JamShare-API?branch=chris-cover)
 
 # JamShare
 
