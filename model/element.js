@@ -13,7 +13,3 @@ const elementSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('element', elementSchema);
-
-//Element.schema.path('name').validate(function(val) {
-  //return /(jamshare)/.test(val);
-//});
