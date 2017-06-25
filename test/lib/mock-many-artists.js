@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const debug = require('debug')('jamshare-api:mock-many-artists');
 const Artist = require('../../model/artist.js');
@@ -18,7 +18,6 @@ module.exports = function(count, done){
     done();
   })
   .catch(done);
-
 }
 
 function mockAUser(){
