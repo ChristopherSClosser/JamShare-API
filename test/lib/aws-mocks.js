@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
-const AWSMock = require('aws-sdk-mock')
+const AWSMock = require('aws-sdk-mock');
 
-module.exports = exports = {}
+module.exports = exports = {};
 
 exports.uploadMock = {
   ETag: '"5eefd06b5b384cc52f35a0c49414ea31"',
@@ -15,15 +15,15 @@ exports.uploadMock = {
 
 AWSMock.mock('S3', 'upload', function(params, callback){
   if(params.ACL !== 'public-read')
-    return callback(new Error('ACL must be public read'))
+    return callback(new Error('ACL must be public read'));
   if(params.Bucket !== process.env.AWS_BUCKET)
-    return callback(new Error('Bucket must be jamshare-api-assets'))
+    return callback(new Error('Bucket must be jamshare-api-assets'));
   if(!params.Key)
-    return callback(new Error('requres Key'))
+    return callback(new Error('requres Key'));
   if(!params.Body)
-    return callback(new Error('requires body'))
-  callback(null, exports.uploadMock)
-})
+    return callback(new Error('requires body'));
+  callback(null, exports.uploadMock);
+});
 
 exports.deleteMock = {
   DeleteMarker: 'true',
@@ -32,8 +32,8 @@ exports.deleteMock = {
 
 AWSMock.mock('S3', 'deleteObject', function(params, callback){
   if(params.Bucket !== process.env.AWS_BUCKET)
-    return callback(new Error('Bucket must be jamshare-api-assets'))
+    return callback(new Error('Bucket must be jamshare-api-assets'));
   if(!params.Key)
-    return callback(new Error('requres Key'))
-  callback(null, exports.deleteMock)
-})
+    return callback(new Error('requres Key'));
+  callback(null, exports.deleteMock);
+});

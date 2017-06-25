@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const debug = require('debug')('jamshare-api:song-mock');
 const artistMock = require('./artist-mock.js');
