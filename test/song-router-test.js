@@ -958,21 +958,25 @@ describe('test /api/song', function(){
         elements: 1,
       }
 
-      before( done => mockManyEverything.call(this, options, done))
+      before( done => mockManyEverything.call(this, options, done));
+
       it('should respond nodes with fuzzy match lu', done => {
         request.get(`${url}/api/public/song?name=lu`)
         .end((err, res) => {
-          expect(res.status).to.equal(200)
-          expect(Array.isArray(res.body)).to.equal(true)
-          let fuzzy = fuzzyRegex('lu')
-          console.log('matches found', res.body.length)
+          expect(res.status).to.equal(200);
+          expect(Array.isArray(res.body)).to.equal(true);
+
+          let fuzzy = fuzzyRegex('lu');
+
+          console.log('matches found', res.body.length);
+
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].name).to.match(fuzzy)
+            expect(res.body[i].name).to.match(fuzzy);
           }
-          done()
-        })
-      })
-    })
+          done();
+        });
+      });
+    });
 
     describe('with ?itemcount=4', function(){
       let options = {
@@ -981,19 +985,21 @@ describe('test /api/song', function(){
         elements: 10,
       }
 
-      before( done => mockManyEverything.call(this, options, done))
+      before( done => mockManyEverything.call(this, options, done));
+
       it('each song should have 4 elements', done => {
         request.get(`${url}/api/public/song?itemcount=4`)
         .end((err, res) => {
-          expect(res.status).to.equal(200)
-          expect(Array.isArray(res.body)).to.equal(true)
+          expect(res.status).to.equal(200);
+          expect(Array.isArray(res.body)).to.equal(true);
+
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].elements.length).to.equal(4)
+            expect(res.body[i].elements.length).to.equal(4);
           }
-          done()
-        })
-      })
-    })
+          done();
+        });
+      });
+    });
 
     describe('with ?pagesize=4', function(){
       let options = {
@@ -1002,19 +1008,21 @@ describe('test /api/song', function(){
         elements: 10,
       }
 
-      before( done => mockManyEverything.call(this, options, done))
+      before( done => mockManyEverything.call(this, options, done));
+
       it('show top 4 songs with 10 elements', done => {
         request.get(`${url}/api/public/song?pagesize=4`)
         .end((err, res) => {
-          expect(res.status).to.equal(200)
-          expect(Array.isArray(res.body)).to.equal(true)
-          expect(res.body.length).to.equal(4)
+          expect(res.status).to.equal(200);
+          expect(Array.isArray(res.body)).to.equal(true);
+          expect(res.body.length).to.equal(4);
+
           for (let i=0; i < res.body.length; i++){
-            expect(res.body[i].elements.length).to.equal(10)
+            expect(res.body[i].elements.length).to.equal(10);
           }
-          done()
-        })
-      })
-    })
-  })
-})
+          done();
+        });
+      });
+    });
+  });
+});
