@@ -61,6 +61,7 @@ elementRouter.post('/api/song/:songID/element', bearerAuth, upload.single('file'
       objectKey: s3data.Key,
       imageURI: s3data.Location,
       userID: req.artist._id,
+      songID: req.params.songID,
     }
     return new Element(elementData).save();
   })
