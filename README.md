@@ -1,22 +1,31 @@
+# JamShare
+---
 [![Build Status](https://travis-ci.org/ChristopherSClosser/JamShare-API.svg?branch=master)](https://travis-ci.org/ChristopherSClosser/JamShare-API)
 [![Coverage Status](https://coveralls.io/repos/github/ChristopherSClosser/JamShare-API/badge.svg?branch=chris-cover)](https://coveralls.io/github/ChristopherSClosser/JamShare-API?branch=chris-cover)
 
-# JamShare
+Version *0.1*
 
-### Who Are We?
 JamShare is an open-source, music-sharing platform designed to allow musicians to share individual components of their music, (like a guitar riff or a drum solo), and connect with other artists who are looking for a similar piece to add to their own jam.
 
-### Specs
+### Authors
+---
+* Kayla Asay,
+* Kaylee Alvarado,
+* Isak Swearingen,
+* Chris Closser
 
+### Specs
+---
 - Full-stack JavaScript application with its own RESTful API.
 - Utilizes MongoDB and Mongoose.js to store Artist information.
 - Utilizes Mocha and Chai for back-end testing.
 
 ### Contributing to JamShare
+---
 If you're a developer and wish to contribute to JamShare, follow the usage instructions below and feel free to hack away. Once you're done making JamShare even better than it already is, submit a pull request to the "dev" branch. We'll review it and let you know if we decide to merge your changes to production.
 
 ### Usage
-
+---
 - Fork and clone our front-end repository into a local directory. Navigate to the directory in  your terminal, and run ```npm install``` to install all required project dependencies.
 - Create a file called '.env' at the root level of the directory. Copy and paste the following into it:
    ```
@@ -25,6 +34,7 @@ If you're a developer and wish to contribute to JamShare, follow the usage instr
 - In your terminal, run ```npm run build-watch```. Our live back-end will be served up on PORT 8080.
 
 ### Making API Calls
+---
 Below is a comprehensive list of valid endpoints in our API, the HTTP methods they are compatible with, as well as what a successful request should produce. We recommend using Postman to make requests.
 
 #### Artist Routes
@@ -74,8 +84,12 @@ Below is a comprehensive list of valid endpoints in our API, the HTTP methods th
 - DELETE request to ```/api/song/:songID/element/:elementID```
   - Should delete a specific Element object of a specific Song object from the database.
 
-Developed by Code Fellows JavaScript students: Chris Closser, Isak Swearingen, Kayla Asay, and Kaylee Alvarado
+### License
+---
+This project is licensed under MIT License - see the LICENSE.md file for details.
 
+### Acknowledgements
+---
 Project adapted from Code Fellows assignment, "SlugGram".
 
 Documentation written by: Kaylee Alvarado
