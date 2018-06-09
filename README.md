@@ -1,9 +1,9 @@
 # JamShare
 ---
 [![Build Status](https://travis-ci.org/ChristopherSClosser/JamShare-API.svg?branch=master)](https://travis-ci.org/ChristopherSClosser/JamShare-API)
-[![Coverage Status](https://coveralls.io/repos/github/ChristopherSClosser/JamShare-API/badge.svg?branch=chris-cover)](https://coveralls.io/github/ChristopherSClosser/JamShare-API?branch=chris-cover)
+[![Coverage Status](https://coveralls.io/repos/github/ChristopherSClosser/JamShare-API/badge.svg?branch=master)](https://coveralls.io/github/ChristopherSClosser/JamShare-API?branch=master)
 
-Version *0.1*
+Version *0.1.1*
 
 JamShare is an open-source, music-sharing platform designed to allow musicians to share individual components of their music, (like a guitar riff or a drum solo), and connect with other artists who are looking for a similar piece to add to their own jam.
 
